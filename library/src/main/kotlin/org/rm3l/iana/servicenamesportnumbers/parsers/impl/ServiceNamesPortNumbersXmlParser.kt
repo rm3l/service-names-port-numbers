@@ -1,28 +1,13 @@
-package org.rm3l.iana.servicenamesportnumbers.parsers
+package org.rm3l.iana.servicenamesportnumbers.parsers.impl
 
 import org.rm3l.iana.servicenamesportnumbers.domain.Protocol
 import org.rm3l.iana.servicenamesportnumbers.domain.Record
+import org.rm3l.iana.servicenamesportnumbers.parsers.ServiceNamesPortNumbersMappingParser
 import org.w3c.dom.Element
 import org.w3c.dom.Node
 import javax.xml.parsers.DocumentBuilderFactory
 
-internal enum class Format(val parser: ServiceNamePortNumberMappingParser) {
-
-    XML(ServiceNamePortNumberXmlParser());
-
-    //We might handle other formats here
-    //CSV,
-    //HTML,
-    //TEXT
-}
-
-
-sealed class ServiceNamePortNumberMappingParser {
-
-    abstract fun parse(content: String): List<Record>
-}
-
-class ServiceNamePortNumberXmlParser : ServiceNamePortNumberMappingParser() {
+class ServiceNamesPortNumbersXmlParser : ServiceNamesPortNumbersMappingParser {
 
     override fun parse(content: String): List<Record> {
         val dbFactory = DocumentBuilderFactory.newInstance()
@@ -48,7 +33,6 @@ class ServiceNamePortNumberXmlParser : ServiceNamePortNumberMappingParser() {
                         description = description,
                         assignmentNotes = note)
                 if (note != null && note.contains("should not be used for discovery purposes", ignoreCase = true)) {
-//                    println("Ignored record: $record since it should not be used for discovery purposes (per IANA recommendations)")
                     continue
                 }
                 records.add(record)

@@ -1,22 +1,50 @@
 package org.rm3l.iana.servicenamesportnumbers
 
+import com.github.benmanes.caffeine.cache.Caffeine
 import org.rm3l.iana.servicenamesportnumbers.domain.Protocol
 import org.rm3l.iana.servicenamesportnumbers.domain.Record
 import org.rm3l.iana.servicenamesportnumbers.domain.RecordFilter
-import org.rm3l.iana.servicenamesportnumbers.internal.ServiceNamePortNumberRegistryCache
-import org.rm3l.iana.servicenamesportnumbers.parsers.Format
+import org.rm3l.iana.servicenamesportnumbers.parsers.ServiceNamesPortNumbersMappingParser
+import org.rm3l.iana.servicenamesportnumbers.parsers.impl.ServiceNamesPortNumbersXmlParser
+import java.net.URL
+import java.util.concurrent.TimeUnit
 
+private const val DEFAULT_DB_URL =
+        "https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xml"
+private const val DEFAULT_CACHE_SIZE = 10L
+private const val DEFAULT_CACHE_EXPIRATION_DAYS = 1L
+
+@Suppress("unused")
 class IANAServiceNamesPortNumbersClient private constructor(
-        private val format: Format
+        private val cacheMaximumSize: Long,
+        private val cacheExpiration: Pair<Long, TimeUnit>,
+        private val database: URL,
+        private val parser: ServiceNamesPortNumbersMappingParser
 ) {
 
-    fun refreshCache() = ServiceNamePortNumberRegistryCache.INSTANCE.refresh(this.format)
+    private val databaseToParserPair = this.database to this.parser
 
-    fun invalidateCache() = ServiceNamePortNumberRegistryCache.INSTANCE.invalidate(this.format)
+    private val cache = Caffeine
+            .newBuilder()
+            .recordStats()
+            .maximumSize(this.cacheMaximumSize)
+            .expireAfterWrite(this.cacheExpiration.first, this.cacheExpiration.second)
+            .expireAfterAccess(this.cacheExpiration.first, this.cacheExpiration.second)
+            .removalListener<Pair<URL, ServiceNamesPortNumbersMappingParser>, List<Record>> { key, _, cause ->
+                println("Key $key was removed from cache : $cause")
+            }
+            .build<Pair<URL, ServiceNamesPortNumbersMappingParser>, List<Record>> { urlParserPair ->
+                println("Loading data from '${urlParserPair.first}' ...")
+                urlParserPair.second.parse(urlParserPair.first.readText())
+            }
+
+    fun refreshCache() = this.cache.refresh(this.databaseToParserPair)
+
+    fun invalidateCache() = this.cache.invalidate(this.databaseToParserPair)
 
     fun query(filter: RecordFilter?): List<Record> {
-        val fullListOfRecords: List<Record> = ServiceNamePortNumberRegistryCache
-                .INSTANCE.get(this.format) ?: throw IllegalStateException("Failed to fetch XML content")
+        val fullListOfRecords: List<Record> = this.cache.get(this.databaseToParserPair) ?:
+                throw IllegalStateException("Failed to fetch content from $database")
         return if (filter == null) {
             fullListOfRecords
         } else {
@@ -39,20 +67,46 @@ class IANAServiceNamesPortNumbersClient private constructor(
     companion object {
 
         @JvmStatic
-        fun builder() = IANAServiceNamesPortNumbersClientBuilder()
+        fun builder() = Builder()
     }
 
-    class IANAServiceNamesPortNumbersClientBuilder {
+    @Suppress("unused")
+    class Builder {
 
-        //TODO Add any other relevant fields here
-        private var format: Format? = null
+        private var cacheMaximumSize: Long? = null
 
-        @Deprecated("Format has an internal meaning, and should not be exposed to the user")
-        private fun withFormat(format: Format): IANAServiceNamesPortNumbersClientBuilder {
-            this.format = format
+        private var cacheExpiration: Pair<Long, TimeUnit>? = null
+
+        private var database: URL? = null
+
+        private var parser: ServiceNamesPortNumbersMappingParser? = null
+
+        fun cacheMaximumSize(size: Long): Builder {
+            this.cacheMaximumSize = size
             return this
         }
 
-        fun build() = IANAServiceNamesPortNumbersClient(this.format ?: Format.XML)
+        fun cacheExpiration(duration: Long, timeUnit: TimeUnit): Builder {
+            this.cacheExpiration = duration to timeUnit
+            return this
+        }
+
+        fun database(database: URL): Builder {
+            this.database = database
+            return this
+        }
+
+        fun <T : ServiceNamesPortNumbersMappingParser> parser(parser: T): Builder {
+            this.parser = parser
+            return this
+        }
+
+        fun build() = IANAServiceNamesPortNumbersClient(
+                cacheMaximumSize = this.cacheMaximumSize ?: DEFAULT_CACHE_SIZE,
+                cacheExpiration = this.cacheExpiration ?: DEFAULT_CACHE_EXPIRATION_DAYS to TimeUnit.DAYS,
+                database = this.database ?: URL(DEFAULT_DB_URL),
+                parser = this.parser ?: ServiceNamesPortNumbersXmlParser())
     }
+
+
 }

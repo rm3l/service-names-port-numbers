@@ -46,7 +46,6 @@ repositories {
 
 dependencies {
     compile project(':library')
-    compile 'khttp:khttp:0.1.0' //TODO Find a way to have this included transitively from the 'library' project
     compile('org.springframework.boot:spring-boot-starter-security')
     compile('org.springframework.boot:spring-boot-starter-web')
     compile('org.springframework.boot:spring-boot-starter-actuator')
