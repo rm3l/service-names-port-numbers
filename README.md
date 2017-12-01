@@ -1,5 +1,14 @@
 # IANA Service Names And Port Numbers Lookup
 
+Library and microservice for looking up inside the IANA Service Names And Port Numbers, written in Kotlin.
+It allows to lookup service names from port numbers, or vice-versa.
+
+This library is a in-memory database that allows to look up IANA records based upon certain filters (e.g., 
+service names, ports, transport protocols,) based on diverse parameters.
+The library is very lightweight, and allows for million of lookups per second. 
+You can add the database by specifying a file or a URL where the data can be downloaded from. 
+The server supports non-interrupting updates and can update the database while it is running.
+
 
 
 ## In use in the following apps/services
