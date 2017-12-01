@@ -3,7 +3,7 @@ ENV APP_HOME=/root/dev/iana-service-names-port-numbers/
 RUN mkdir -p $APP_HOME
 WORKDIR $APP_HOME
 COPY . .
-RUN ./gradlew clean build
+RUN ./gradlew clean build -Dorg.gradle.parallel=false
 
 FROM openjdk:8-jre-alpine
 ENV JAVA_OPTS=""
