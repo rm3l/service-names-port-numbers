@@ -1,9 +1,10 @@
 FROM openjdk:8-jdk-alpine AS BUILD_IMAGE
+ENV GRADLE_OPTS="-Dorg.gradle.daemon=false -Dorg.gradle.parallel=false -Dkotlin.incremental=false -Dkotlin.compiler.execution.strategy=in-process"
 ENV APP_HOME=/root/dev/iana-service-names-port-numbers/
 RUN mkdir -p $APP_HOME
 WORKDIR $APP_HOME
 COPY . .
-RUN ./gradlew clean build -Dorg.gradle.daemon=false -Dorg.gradle.parallel=false -Dkotlin.incremental=false
+RUN ./gradlew clean build --stacktrace
 
 FROM openjdk:8-jre-alpine
 ENV JAVA_OPTS=""

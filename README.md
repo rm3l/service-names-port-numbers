@@ -4,11 +4,15 @@ Library and microservice for looking up inside the IANA Service Names And Port N
 It allows to lookup service names from port numbers, or vice-versa.
 
 This library is a in-memory database that allows to look up IANA records based upon certain filters (e.g., 
-service names, ports, transport protocols,) based on diverse parameters.
+service names, ports, transport protocols, ...).
 The library is very lightweight, and allows for million of lookups per second. 
-You can add the database by specifying a file or a URL where the data can be downloaded from. 
+By default, the database is automatically fetched from 
+[here](https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xml). 
+But you can add the database by specifying a file or a URL where the data can be downloaded from. 
 The server supports non-interrupting updates and can update the database while it is running.
 
+Service names and port numbers are used to distinguish between different services that run over transport protocols 
+such as TCP, UDP, DCCP, and SCTP.
 
 
 ## In use in the following apps/services
