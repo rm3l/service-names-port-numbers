@@ -10,7 +10,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver
 import java.io.File
 
 @Configuration
-class GraphQLConfiguration(val xmlRegistryClient: IANAServiceNamesPortNumbersClient) {
+class GraphQLConfiguration(val registryClient: IANAServiceNamesPortNumbersClient) {
 
     @Bean
     fun graphQLSchema(): GraphQLSchema {
@@ -20,7 +20,7 @@ class GraphQLConfiguration(val xmlRegistryClient: IANAServiceNamesPortNumbersCli
                 .toList()
         return SchemaParser.newParser()
                 .files(*allSchemas.toTypedArray())
-                .resolvers(Query(xmlRegistryClient))
+                .resolvers(Query(registryClient))
                 .build()
                 .makeExecutableSchema()
     }

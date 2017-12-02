@@ -16,7 +16,7 @@ class ApplicationConfiguration {
     lateinit var cacheExpirationDays: String
 
     @Bean(initMethod = "refreshCache", destroyMethod = "invalidateCache")
-    fun xmlRegistryClient() = IANAServiceNamesPortNumbersClient
+    fun registryClient() = IANAServiceNamesPortNumbersClient
             .builder()
             .cacheMaximumSize(this.cacheMaximumSize.toLong())
             .cacheExpiration(this.cacheExpirationDays.toLong(), TimeUnit.DAYS)

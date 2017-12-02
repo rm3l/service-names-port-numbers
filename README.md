@@ -14,6 +14,38 @@ The server supports non-interrupting updates and can update the database while i
 Service names and port numbers are used to distinguish between different services that run over transport protocols 
 such as TCP, UDP, DCCP, and SCTP.
 
+## Usage
+
+### Using the library
+TODO
+
+### Using the server
+
+### Online Microservice
+TODO
+
+#### Downloading and building
+TODO
+
+#### Querying the GraphQL API
+TODO
+
+#### Docker
+
+A Docker repositry with the microservice can be found here: https://hub.docker.com/r/rm3l/iana-service-names-port-numbers/
+
+To fetch the docker image, run: 
+```bash
+docker pull rm3l/iana-service-names-port-numbers
+```
+
+To run the server with the default options and expose it on ports 8080 (and port 8081, for the management endpoints), run:
+```bash
+docker run -p 8080:8080 -p 8081:8081 --rm rm3l/iana-service-names-port-numbers
+```
+
+Then open http://localhost:8080/graphiql on your favorite browser, to start exploring the GraphQL API.
+
 
 ## In use in the following apps/services
 
