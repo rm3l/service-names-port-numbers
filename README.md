@@ -1,6 +1,6 @@
 # IANA Service Names And Port Numbers Lookup
 
-[![Bintray](https://img.shields.io/bintray/v/rm3l/maven/org.rm3l:iana-service-names-port-numbers.svg)](https://bintray.com/rm3l/maven/org.rm3l%3Aiana-service-names-port-numbers) 
+[![Bintray](https://img.shields.io/bintray/v/rm3l/maven/org.rm3l.iana:service-names-port-numbers.svg)](https://bintray.com/rm3l/maven/org.rm3l.iana%3Aservice-names-port-numbers) 
 [![License](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/rm3l/iana-service-names-port-numbers/blob/master/LICENSE) 
 
 [![Travis branch](https://img.shields.io/travis/rm3l/iana-service-names-port-numbers/master.svg)](https://travis-ci.org/rm3l/iana-service-names-port-numbers)  
