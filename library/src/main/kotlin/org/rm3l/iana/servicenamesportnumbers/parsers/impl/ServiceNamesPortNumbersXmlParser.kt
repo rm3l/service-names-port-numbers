@@ -1,3 +1,4 @@
+@file:JvmName("ServiceNamesPortNumbersXmlParser")
 package org.rm3l.iana.servicenamesportnumbers.parsers.impl
 
 import org.rm3l.iana.servicenamesportnumbers.domain.Protocol
@@ -7,6 +8,10 @@ import org.w3c.dom.Element
 import org.w3c.dom.Node
 import javax.xml.parsers.DocumentBuilderFactory
 
+/**
+ * Parser for the XML Database of the IANA Registry,
+ * located at www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xml
+ */
 class ServiceNamesPortNumbersXmlParser : ServiceNamesPortNumbersMappingParser {
 
     override fun parse(content: String): List<Record> {

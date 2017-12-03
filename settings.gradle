@@ -1,4 +1,6 @@
+include ':library'
+include ':application'
+
 rootProject.name = 'iana-service-names-port-numbers'
-
-
-include 'library', 'application'
+project(":library").name = 'iana-service-names-port-numbers-client'
+project(":application").name = 'iana-service-names-port-numbers-app'

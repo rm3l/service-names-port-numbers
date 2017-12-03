@@ -6,6 +6,9 @@ import org.junit.Test
 import org.rm3l.iana.servicenamesportnumbers.domain.Protocol
 import org.rm3l.iana.servicenamesportnumbers.domain.RecordFilter
 
+/**
+ * Test class
+ */
 class IANAServiceNamesPortNumbersClientTest {
 
     companion object {
@@ -20,7 +23,6 @@ class IANAServiceNamesPortNumbersClientTest {
     }
 
     @Test
-    @Throws(Exception::class)
     fun testQueryPorts() {
         val records = defaultClient!!.query(80)
         Assert.assertFalse(records.isEmpty())
@@ -41,7 +43,6 @@ class IANAServiceNamesPortNumbersClientTest {
     }
 
     @Test
-    @Throws(Exception::class)
     fun testQueryServiceNames() {
         val records = defaultClient!!.query("http")
         Assert.assertFalse(records.isEmpty())
@@ -62,7 +63,6 @@ class IANAServiceNamesPortNumbersClientTest {
     }
 
     @Test
-    @Throws(Exception::class)
     fun testQueryProtocols() {
         val records = defaultClient!!.query(Protocol.TCP)
         Assert.assertFalse(records.isEmpty())
@@ -70,7 +70,6 @@ class IANAServiceNamesPortNumbersClientTest {
     }
 
     @Test
-    @Throws(Exception::class)
     fun testQueryWithFilter() {
         val records = defaultClient!!.query(RecordFilter(
                 services = listOf("http"),

@@ -1,3 +1,26 @@
+/*
+ * Copyright (c) 2017 Armel Soro
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+final homePath = System.properties['user.home']
+
 buildscript {
     ext {
         kotlinVersion = '1.2.0'
@@ -8,14 +31,20 @@ buildscript {
     dependencies {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
         classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.9.15"
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0'
     }
 }
 
 apply plugin: 'kotlin'
+apply plugin: 'org.jetbrains.dokka'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven'
 
 group = 'org.rm3l.iana'
-version = '0.0.1-SNAPSHOT'
+version = '0.1.3'
 sourceCompatibility = 1.8
+targetCompatibility = 1.8
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
@@ -41,4 +70,76 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
     kotlinOptions {
         apiVersion = "1.2"
     }
+}
+
+task generateSourcesJar(type: Jar) {
+    classifier 'sources'
+}
+
+task generateJavadocs(type: Javadoc) {
+    failOnError false
+}
+
+task generateJavadocsJar(type: Jar) {
+    from generateJavadocs.destinationDir
+    classifier 'javadoc'
+}
+
+task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaTask) {
+    outputFormat = 'javadoc'
+    outputDirectory = "$buildDir/javadoc"
+}
+
+generateJavadocsJar.dependsOn generateJavadocs
+
+artifacts {
+    archives generateJavadocsJar
+    archives generateSourcesJar
+}
+
+bintray {
+
+    //Attempt to read keystore.properties file, if any first
+    final propsFile = new File(homePath.toString() + "/.droid/", "maoni.bintray.properties")
+
+    if (propsFile.exists()) {
+        printf("[Bintray] Using properties file located at " + propsFile.absolutePath)
+        final props = new Properties()
+        props.load(new FileInputStream(propsFile))
+        user = props['user']
+        key = props['key']
+    } else {
+        user = ""
+        key = ""
+    }
+
+    publish = true //If version should be auto published after an upload
+
+    pkg {
+        repo = 'maven'
+        name = 'org.rm3l.iana:service-names-port-numbers'
+        labels = ['iana', 'lookup', 'services', 'ports']
+
+        //noinspection GroovyAssignabilityCheck
+        version {
+            name = '0.1.3'
+            desc = 'IANA Service Names and Port Numbers Lookup library'
+            released = new Date()
+            vcsTag = '0.1.3'
+        }
+
+        publicDownloadNumbers = true
+
+        licenses = ['MIT']
+        vcsUrl = 'https://github.com/rm3l/iana-service-names-port-numbers.git'
+        websiteUrl = 'https://github.com/rm3l/iana-service-names-port-numbers'
+        issueTrackerUrl = 'https://github.com/rm3l/iana-service-names-port-numbers/issues'
+
+    }
+    configurations = ['archives']
+}
+
+dokka {
+    outputFormat = 'html'
+    outputDirectory = "$buildDir/javadoc"
 }
