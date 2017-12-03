@@ -48,10 +48,15 @@ compile 'org.rm3l.iana:iana-service-names-port-numbers-client:0.1.3'
 
 #### Usage
 
-This shows the basic usage if the library. Opening a database and querying.
+This shows the basic usage of the library. Opening a database and querying.
 
 Example with Kotlin:
 ```kotlin
+import org.rm3l.iana.servicenamesportnumbers.IANAServiceNamesPortNumbersClient
+import org.rm3l.iana.servicenamesportnumbers.domain.Record
+import org.rm3l.iana.servicenamesportnumbers.domain.RecordFilter
+import org.rm3l.iana.servicenamesportnumbers.domain.Protocol
+
 fun main(args: Array<String>) {
 
     val ianaClient = IANAServiceNamesPortNumbersClient
@@ -121,12 +126,12 @@ You will then find the artifacts in the sub-projects `build` directories:
 Running the app is as simple as issuing the following command:
 
 ```bash
-java -jar application/build/libs/application/build/libs/iana-service-names-port-numbers-app-0.1.3.jar
+java -jar ./application/build/libs/iana-service-names-port-numbers-app-0.1.3.jar
 ```
 
 Then navigate to http://localhost:8080/graphiql to start exploring the GraphQL API.
 
-Visit the `application/src/main/resources/application.properties` 
+Visit the `application/src/main/resources/application.properties` file 
 to see which JVM options you can pass to the application. 
 For example, to make the service listen on port `8888` instead, run:
 ```bash

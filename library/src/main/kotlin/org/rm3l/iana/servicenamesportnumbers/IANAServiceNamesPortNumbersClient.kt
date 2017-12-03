@@ -29,11 +29,11 @@ private const val DEFAULT_CACHE_EXPIRATION_DAYS = 1L
 class IANAServiceNamesPortNumbersClient private constructor(
         private val cacheMaximumSize: Long,
         private val cacheExpiration: Pair<Long, TimeUnit>,
-        private val database: URL,
-        private val parser: ServiceNamesPortNumbersMappingParser
+        private var database: URL,
+        private var parser: ServiceNamesPortNumbersMappingParser
 ) {
 
-    private val databaseToParserPair = this.database to this.parser
+    private var databaseToParserPair = this.database to this.parser
 
     private val cache = Caffeine
             .newBuilder()
@@ -80,6 +80,39 @@ class IANAServiceNamesPortNumbersClient private constructor(
         this.cache.invalidateAll()
         this.recordsCache.invalidateAll()
     }
+
+    /**
+     * Update the internal database
+     *
+     * @param database the new database URL
+     * @param parser the new parser to use. If null is specified, the existing parser will be used.
+     * In this case, you need to make sure the new database is compatible with the existing parser
+     */
+    fun updateDatabase(database: URL, parser: ServiceNamesPortNumbersMappingParser? = null) {
+        this.databaseToParserPair = database to (parser?:this.parser)
+        this.recordsCache.invalidateAll()
+        this.refreshCache()
+    }
+
+    /**
+     * Update the internal database
+     *
+     * @param database the new database URL
+     * @param parser the new parser to use. If null is specified, the existing parser will be used.
+     * In this case, you need to make sure the new database is compatible with the existing parser
+     */
+    fun updateDatabase(database: URI, parser: ServiceNamesPortNumbersMappingParser? = null) =
+            this.updateDatabase(database.toURL(), parser)
+
+    /**
+     * Update the internal database
+     *
+     * @param database the new database URL
+     * @param parser the new parser to use. If null is specified, the existing parser will be used.
+     * In this case, you need to make sure the new database is compatible with the existing parser
+     */
+    fun updateDatabase(database: File, parser: ServiceNamesPortNumbersMappingParser? = null) =
+            this.updateDatabase(database.toURI(), parser)
 
     /**
      * Returns a current snapshot of this cache's cumulative statistics. All statistics are
