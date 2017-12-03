@@ -1,22 +1,41 @@
+# The GraphQL Schema. No mutation query since this is a readonly API
 schema {
+    # Root query
     query: Query
 }
 
 #Root Query
 type Query {
+    # List of IANA records
     records(filter: RecordFilter): [Record]
 }
 
+# IANA Record
 type Record {
+
+    # Service Name
     serviceName: String,
+
+    # Transport Protocol
     transportProtocol: Protocol
+
+    # Description
     description: String
+
+    # Port Number
     portNumber: Long
+
+    # Assignment Notes
     assignmentNotes: String
+
+    # Registration Date
     registrationDate: String
+
+    # Contact Person
     contact: Person
 }
 
+# Transport Protocol
 enum Protocol {
     TCP
     UDP
@@ -24,16 +43,34 @@ enum Protocol {
     SCTP
 }
 
+# Filter
 input RecordFilter {
+
+    # Transport Protocols
     protocols: [Protocol]
+
+    # Port Numbers
     ports: [Long]
+
+    # Service Names
     services: [String]
 }
 
+# Person
 type Person {
+
+    # Identifier
     id: ID!
+
+    # Name
     name: String
+
+    # Organization
     org: String
+
+    # URI
     uri: String
+
+    # Last Update
     updated: String
 }

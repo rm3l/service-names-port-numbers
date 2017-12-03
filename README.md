@@ -75,6 +75,9 @@ fun main(args: Array<String>) {
                 RecordFilter(
                     ports=listOf(80L, 443L, 2375L),
                     protocols=listOf(Protocol.TCP)))
+    
+    //Hot-update the database
+    ianaClient.updateDatabase(File("/path/to/my/local/iana-database.xml"))
 }
 ```
 
@@ -105,6 +108,9 @@ public class MyService {
                         null,
                         Collections.singletonList(Protocol.TCP),
                         Arrays.asList(80L, 443L, 2375L)));
+        
+        //Hot-update the database
+        ianaClient.updateDatabase(new File("/path/to/my/local/iana-database.xml"));
     }
 }
 ```
