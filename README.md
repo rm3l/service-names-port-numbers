@@ -1,5 +1,16 @@
 # IANA Service Names And Port Numbers Lookup
 
+[![Bintray](https://img.shields.io/bintray/v/rm3l/maven/org.rm3l:iana-service-names-port-numbers-client.svg)](https://bintray.com/rm3l/maven/org.rm3l%3Aiana-service-names-port-numbers-client) 
+[![License](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/rm3l/iana-service-names-port-numbers/blob/master/LICENSE) 
+
+[![Travis branch](https://img.shields.io/travis/rm3l/iana-service-names-port-numbers/master.svg)](https://travis-ci.org/rm3l/iana-service-names-port-numbers)  
+[![Coverage Status](https://coveralls.io/repos/github/rm3l/iana-service-names-port-numbers/badge.svg?branch=master)](https://coveralls.io/github/rm3l/iana-service-names-port-numbers?branch=master)  
+
+[![Docker Automated build](https://img.shields.io/docker/automated/rm3l/iana-service-names-port-numbers.svg)](https://hub.docker.com/r/rm3l/iana-service-names-port-numbers) 
+[![Docker Build Status](https://img.shields.io/docker/build/rm3l/iana-service-names-port-numbers.svg)](https://hub.docker.com/r/rm3l/iana-service-names-port-numbers) 
+[![Docker Stars](https://img.shields.io/docker/stars/rm3l/iana-service-names-port-numbers.svg)](https://hub.docker.com/r/rm3l/iana-service-names-port-numbers) 
+[![Docker Pulls](https://img.shields.io/docker/pulls/rm3l/iana-service-names-port-numbers.svg)](https://hub.docker.com/r/rm3l/iana-service-names-port-numbers)
+
 Library and microservice for looking up inside the IANA Service Names And Port Numbers Registry records. 
 Written in [Kotlin](https://kotlinlang.org).
 It allows to lookup service names from port numbers, or vice-versa.
