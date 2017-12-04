@@ -95,3 +95,6 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
         apiVersion = "1.2"
     }
 }
+
+task stage(dependsOn: ['build', 'clean'])
+build.mustRunAfter clean
