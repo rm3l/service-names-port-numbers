@@ -27,8 +27,15 @@ package org.rm3l.iana.servicenamesportnumbers.app
 
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.context.annotation.PropertySource
+import org.springframework.context.annotation.PropertySources
 
 @SpringBootApplication
+@PropertySources(value = [
+    //The order matters here. If a same property key is found in many files, the last one wins.
+    PropertySource(value = ["classpath:application.properties"]),
+    PropertySource(value = ["file:/etc/iana/service-names-port-numbers-app.properties"], ignoreResourceNotFound = true)
+])
 class ServiceNamesPortNumbersApplication
 
 @Suppress("unused")

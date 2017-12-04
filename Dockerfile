@@ -45,6 +45,7 @@ EXPOSE 8081
 RUN apk add --no-cache curl
 HEALTHCHECK --interval=5m --timeout=3s \
   CMD curl -f http://localhost:8081/management/health || exit 1
+VOLUME /etc/iana
 ENTRYPOINT exec \
     java \
     $JAVA_OPTS \
