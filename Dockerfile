@@ -21,6 +21,7 @@
 #SOFTWARE.
 
 FROM gradle:4.3.1-jdk8-alpine AS BUILD_IMAGE
+MAINTAINER Armel Soro <armel@rm3l.org>
 ARG GRADLE_OPTS="-Dorg.gradle.daemon=false -Dorg.gradle.parallel=false"
 ARG GRADLE_OPTS="$GRADLE_OPTS -Dkotlin.incremental=false -Dkotlin.compiler.execution.strategy=in-process"
 USER root
@@ -33,6 +34,7 @@ USER gradle
 RUN gradle clean build --stacktrace
 
 FROM openjdk:8-jre-alpine
+MAINTAINER Armel Soro <armel@rm3l.org>
 ENV JAVA_OPTS=""
 WORKDIR /root/
 COPY --from=BUILD_IMAGE \
