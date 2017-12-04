@@ -154,7 +154,7 @@ For example, to make the service listen on port `8888` instead, run:
 ```bash
 java \
  -Dserver.port=8888 \
- -jar application/build/libs/application/build/libs/iana-service-names-port-numbers-app-0.1.4.jar
+ -jar ./application/build/libs/iana-service-names-port-numbers-app-0.1.4.jar
 ```
 
 #### Querying the GraphQL API
