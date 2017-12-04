@@ -31,9 +31,19 @@ And [GraphQL](http://graphql.org) is a data query language allowing clients to d
 and exactly the same structure of the data is returned from the server. It is a strongly typed runtime which allows 
 clients to dictate what data is needed.
 
+* Live Server on Heroku PaaS: https://iana-service-name-port-number.herokuapp.com/graphiql
 * Download IANA Database: https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml
 
 ## Usage
+
+### Live Server
+
+A live running version of the GraphQL API is available on Heroku: https://iana-service-name-port-number.herokuapp.com/graphiql
+
+Note that this API operates entirely from memory, and auto-updates itself every 12 hours.
+
+Also, this runs on a free dyno, which means it goes to sleep ater 30 minutes of inactivity.
+
 
 ### Using the library
 
