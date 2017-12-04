@@ -42,7 +42,7 @@ A live running version of the GraphQL API is available on Heroku: https://iana-s
 
 Note that this API operates entirely from memory, and auto-updates itself every 12 hours.
 
-Also, this runs on a free dyno, which means it goes to sleep ater 30 minutes of inactivity.
+Also, this runs on a free dyno, and as such it may go to sleep ater 30 minutes of inactivity.
 
 
 ### Using the library
