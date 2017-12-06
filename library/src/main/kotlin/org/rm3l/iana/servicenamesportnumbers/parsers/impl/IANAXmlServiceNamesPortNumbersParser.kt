@@ -21,7 +21,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-@file:JvmName("ServiceNamesPortNumbersXmlParser")
 package org.rm3l.iana.servicenamesportnumbers.parsers.impl
 
 import org.rm3l.iana.servicenamesportnumbers.domain.Protocol
@@ -31,11 +30,14 @@ import org.w3c.dom.Element
 import org.w3c.dom.Node
 import javax.xml.parsers.DocumentBuilderFactory
 
+const val IANA_XML_DB_URL =
+        "https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xml"
+
 /**
  * Parser for the XML Database of the IANA Registry,
  * located at www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xml
  */
-class ServiceNamesPortNumbersXmlParser : ServiceNamesPortNumbersMappingParser {
+class IANAXmlServiceNamesPortNumbersParser : ServiceNamesPortNumbersMappingParser {
 
     override fun parse(content: String): List<Record> {
         val dbFactory = DocumentBuilderFactory.newInstance()

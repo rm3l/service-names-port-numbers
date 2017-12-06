@@ -41,6 +41,8 @@ class ApplicationConfiguration {
     @Bean(initMethod = "refreshCache", destroyMethod = "invalidateCache")
     fun registryClient() = IANAServiceNamesPortNumbersClient
             .builder()
+            .withIANADatabase()
+            .withNmapServicesDatabase()
             .cacheMaximumSize(this.cacheMaximumSize.toLong())
             .cacheExpiration(this.cacheExpirationDays.toLong(), TimeUnit.DAYS)
             .build()

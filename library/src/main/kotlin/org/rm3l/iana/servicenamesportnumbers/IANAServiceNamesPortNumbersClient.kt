@@ -28,14 +28,13 @@ import org.rm3l.iana.servicenamesportnumbers.domain.Protocol
 import org.rm3l.iana.servicenamesportnumbers.domain.Record
 import org.rm3l.iana.servicenamesportnumbers.domain.RecordFilter
 import org.rm3l.iana.servicenamesportnumbers.parsers.ServiceNamesPortNumbersMappingParser
-import org.rm3l.iana.servicenamesportnumbers.parsers.impl.ServiceNamesPortNumbersXmlParser
+import org.rm3l.iana.servicenamesportnumbers.parsers.impl.IANAXmlServiceNamesPortNumbersParser
+import org.rm3l.iana.servicenamesportnumbers.parsers.impl.IANA_XML_DB_URL
 import java.io.File
 import java.net.URI
 import java.net.URL
 import java.util.concurrent.TimeUnit
 
-private const val DEFAULT_DB_URL =
-        "https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xml"
 private const val DEFAULT_CACHE_SIZE = 10L
 private const val DEFAULT_CACHE_EXPIRATION_DAYS = 1L
 
@@ -52,11 +51,7 @@ private const val DEFAULT_CACHE_EXPIRATION_DAYS = 1L
 class IANAServiceNamesPortNumbersClient private constructor(
         private val cacheMaximumSize: Long,
         private val cacheExpiration: Pair<Long, TimeUnit>,
-        private var database: URL,
-        private var parser: ServiceNamesPortNumbersMappingParser
-) {
-
-    private var databaseToParserPair = this.database to this.parser
+        private val databaseAndParserMap: MutableMap<URL, ServiceNamesPortNumbersMappingParser> = mutableMapOf()) {
 
     private val cache = Caffeine
             .newBuilder()
@@ -64,37 +59,36 @@ class IANAServiceNamesPortNumbersClient private constructor(
             .maximumSize(this.cacheMaximumSize)
             .expireAfterWrite(this.cacheExpiration.first, this.cacheExpiration.second)
             .expireAfterAccess(this.cacheExpiration.first, this.cacheExpiration.second)
-            .removalListener<Pair<URL, ServiceNamesPortNumbersMappingParser>, List<Record>> { key, _, cause ->
+            .removalListener<Pair<URL, ServiceNamesPortNumbersMappingParser>, Set<Record>> { key, _, cause ->
                 println("Key $key was removed from cache : $cause")
             }
-            .build<Pair<URL, ServiceNamesPortNumbersMappingParser>, List<Record>> { urlParserPair ->
+            .build<Pair<URL, ServiceNamesPortNumbersMappingParser>, Set<Record>> { urlParserPair ->
                 println("Loading data from '${urlParserPair.first}' ...")
-                urlParserPair.second.parse(urlParserPair.first.readText())
+                urlParserPair.second.parse(urlParserPair.first.readText()).toSet()
             }
 
     private val recordsCache = Caffeine
             .newBuilder()
             .recordStats()
             .maximumSize(Math.max(this.cacheMaximumSize/2, 10L))
-            .build<RecordFilter, List<Record>> { filter ->
-                val fullRecords = this.cache.get(this.databaseToParserPair)
+            .build<RecordFilter, Collection<Record>> { filter ->
+                val fullRecords = this.databaseAndParserMap
+                        .flatMap { this.cache.get(it.toPair())?: emptySet() }
+                        .toSet()
                 if (filter.isEmpty()) {
                     fullRecords
                 } else {
                     fullRecords
-                            ?.
-                                    filter { filter.ports == null || filter.ports.isEmpty() || filter.ports.contains(it.portNumber) }
-                            ?.
-                                    filter { filter.protocols == null || filter.protocols.isEmpty() || filter.protocols.contains(it.transportProtocol) }
-                            ?.
-                                    filter { filter.services == null || filter.services.isEmpty() || filter.services.contains(it.serviceName) }
+                            .filter { filter.ports == null || filter.ports.isEmpty() || filter.ports.contains(it.portNumber) }
+                            .filter { filter.protocols == null || filter.protocols.isEmpty() || filter.protocols.contains(it.transportProtocol) }
+                            .filter { filter.services == null || filter.services.isEmpty() || filter.services.contains(it.serviceName) }
                 }
             }
 
     /**
      * Force a refresh of the internal cache
      */
-    fun refreshCache() = this.cache.refresh(this.databaseToParserPair)
+    fun refreshCache() = this.databaseAndParserMap.forEach { this.cache.refresh(it.toPair()) }
 
     /**
      * Force-invalidate the internal cache
@@ -107,12 +101,15 @@ class IANAServiceNamesPortNumbersClient private constructor(
     /**
      * Update the internal database
      *
-     * @param database the new database URL
+     * @param oldDatabase the old database URL
+     * @param newDatabase the new database URL
      * @param parser the new parser to use. If null is specified, the existing parser will be used.
      * In this case, you need to make sure the new database is compatible with the existing parser
      */
-    fun updateDatabase(database: URL, parser: ServiceNamesPortNumbersMappingParser? = null) {
-        this.databaseToParserPair = database to (parser?:this.parser)
+    @Suppress("MemberVisibilityCanPrivate")
+    fun updateDatabase(oldDatabase: URL, newDatabase: URL, parser: ServiceNamesPortNumbersMappingParser? = null) {
+        val existingParser = this.databaseAndParserMap.remove(oldDatabase)
+        this.databaseAndParserMap[newDatabase] = parser?:existingParser?: IANA_XML_DB_PARSER
         this.recordsCache.invalidateAll()
         this.refreshCache()
     }
@@ -120,22 +117,25 @@ class IANAServiceNamesPortNumbersClient private constructor(
     /**
      * Update the internal database
      *
-     * @param database the new database URL
+     * @param oldDatabase the old database URI
+     * @param newDatabase the new database URI
      * @param parser the new parser to use. If null is specified, the existing parser will be used.
      * In this case, you need to make sure the new database is compatible with the existing parser
      */
-    fun updateDatabase(database: URI, parser: ServiceNamesPortNumbersMappingParser? = null) =
-            this.updateDatabase(database.toURL(), parser)
+    @Suppress("MemberVisibilityCanPrivate")
+    fun updateDatabase(oldDatabase: URI, newDatabase: URI, parser: ServiceNamesPortNumbersMappingParser? = null) =
+            this.updateDatabase(oldDatabase.toURL(), newDatabase.toURL(), parser)
 
     /**
      * Update the internal database
      *
-     * @param database the new database URL
+     * @param oldDatabase the old database File
+     * @param newDatabase the new database File
      * @param parser the new parser to use. If null is specified, the existing parser will be used.
      * In this case, you need to make sure the new database is compatible with the existing parser
      */
-    fun updateDatabase(database: File, parser: ServiceNamesPortNumbersMappingParser? = null) =
-            this.updateDatabase(database.toURI(), parser)
+    fun updateDatabase(oldDatabase: File, newDatabase: File, parser: ServiceNamesPortNumbersMappingParser? = null) =
+            this.updateDatabase(oldDatabase.toURI(), newDatabase.toURI(), parser)
 
     /**
      * Returns a current snapshot of this cache's cumulative statistics. All statistics are
@@ -182,11 +182,14 @@ class IANAServiceNamesPortNumbersClient private constructor(
 
     companion object {
 
+        private val IANA_XML_DB_PARSER = IANAXmlServiceNamesPortNumbersParser()
+
         /**
-         * Entry point for constructing a new instance of the [IANAServiceNamesPortNumbersClient]
+         * Entry point for constructing a new instance of the [IANAServiceNamesPortNumbersClient].
+         * Contains by default the IANA XML Database, but you are free to add other parsers as needed.
          */
         @JvmStatic
-        fun builder() = Builder()
+        fun builder() = Builder().withIANADatabase()
     }
 
     /**
@@ -204,9 +207,7 @@ class IANAServiceNamesPortNumbersClient private constructor(
 
         private var cacheExpiration: Pair<Long, TimeUnit>? = null
 
-        private var database: URL? = null
-
-        private var parser: ServiceNamesPortNumbersMappingParser? = null
+        private val databaseAndParserMap: MutableMap<URL?, ServiceNamesPortNumbersMappingParser?> = mutableMapOf()
 
         /**
          * Set the max size of the cache
@@ -228,11 +229,55 @@ class IANAServiceNamesPortNumbersClient private constructor(
         }
 
         /**
+         * Use the IANA Database
+         */
+        fun withIANADatabase() = this.addDatabaseAndParser(
+                URL(IANA_XML_DB_URL),
+                org.rm3l.iana.servicenamesportnumbers.IANAServiceNamesPortNumbersClient.IANA_XML_DB_PARSER)
+
+        /**
+         * Use the IANA Database
+         */
+        fun withNmapServicesDatabase() = this.addDatabaseAndParser(
+                URL(org.rm3l.iana.servicenamesportnumbers.parsers.impl.NMAP_SERVICES_DB_URL),
+                org.rm3l.iana.servicenamesportnumbers.parsers.impl.NmapServicesParser())
+
+        /**
+         * Add a database URL to fetch, along with its parser
+         * @param T the dedicated type of parser
+         * @param database the database to set
+         * @param parser the parser to use
+         */
+        fun <T : ServiceNamesPortNumbersMappingParser> addDatabaseAndParser(database: URL, parser: T? = null): Builder {
+            this.databaseAndParserMap.put(database, parser)
+            return this
+        }
+
+        /**
+         * Add a database URI to fetch, along with its parser
+         * @param T the dedicated type of parser
+         * @param database the database to set
+         * @param parser the parser to use
+         */
+        fun <T : ServiceNamesPortNumbersMappingParser> addDatabaseAndParser(database: URI, parser: T? = null) =
+                this.addDatabaseAndParser(database.toURL(), parser)
+
+        /**
+         * Add a database File to fetch, along with its parser
+         * @param T the dedicated type of parser
+         * @param database the database to set
+         * @param parser the parser to use
+         */
+        fun <T : ServiceNamesPortNumbersMappingParser> addDatabaseAndParser(database: File, parser: T? = null) =
+                this.addDatabaseAndParser(database.toURI(), parser)
+
+        /**
          * Set the database URL for lookup
          * @param database the database to set
          */
         fun database(database: URL): Builder {
-            this.database = database
+            this.databaseAndParserMap.clear()
+            this.addDatabaseAndParser(database, null)
             return this
         }
 
@@ -249,12 +294,12 @@ class IANAServiceNamesPortNumbersClient private constructor(
         fun database(database: File) = this.database(database.toURI())
 
         /**
-         * Set the database parser for lookup
+         * Set the database parser for lookup. This will be applied to all databases set.
          * @param T the dedicated type of parser
          * @param parser the parser to set
          */
         fun <T : ServiceNamesPortNumbersMappingParser> parser(parser: T): Builder {
-            this.parser = parser
+            this.databaseAndParserMap.replaceAll { _, _ -> parser }
             return this
         }
 
@@ -262,11 +307,16 @@ class IANAServiceNamesPortNumbersClient private constructor(
          * Construct a new instance of [IANAServiceNamesPortNumbersClient],
          * with the parameters set beforehand, or with the default settings
          */
-        fun build() = IANAServiceNamesPortNumbersClient(
-                cacheMaximumSize = this.cacheMaximumSize ?: DEFAULT_CACHE_SIZE,
-                cacheExpiration = this.cacheExpiration ?: DEFAULT_CACHE_EXPIRATION_DAYS to TimeUnit.DAYS,
-                database = this.database ?: URL(DEFAULT_DB_URL),
-                parser = this.parser ?: ServiceNamesPortNumbersXmlParser())
+        fun build(): IANAServiceNamesPortNumbersClient {
+            return IANAServiceNamesPortNumbersClient(
+                    cacheMaximumSize = this.cacheMaximumSize ?: DEFAULT_CACHE_SIZE,
+                    cacheExpiration = this.cacheExpiration ?: DEFAULT_CACHE_EXPIRATION_DAYS to TimeUnit.DAYS,
+                    databaseAndParserMap = this.databaseAndParserMap
+                            .mapKeys { it.key?: URL(IANA_XML_DB_URL) }
+                            .mapValues { it.value?: IANA_XML_DB_PARSER }
+                            .toMutableMap()
+            )
+        }
     }
 
 

@@ -6,8 +6,11 @@ schema {
 
 #Root Query
 type Query {
-    # List of IANA records
+    # List of records
     records(filter: RecordFilter): [Record]
+
+    # Single record
+    record(serviceName: String, transportProtocol: Protocol!, portNumber: Long!): Record
 }
 
 # IANA Record

@@ -21,17 +21,32 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
+@file:Suppress("unused")
+
 package org.rm3l.iana.servicenamesportnumbers.app.resolvers
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver
 import org.rm3l.iana.servicenamesportnumbers.IANAServiceNamesPortNumbersClient
+import org.rm3l.iana.servicenamesportnumbers.domain.Protocol
 import org.rm3l.iana.servicenamesportnumbers.domain.Record
 import org.rm3l.iana.servicenamesportnumbers.domain.RecordFilter
 
 class Query(private val registryClient: IANAServiceNamesPortNumbersClient) : GraphQLQueryResolver {
 
+    fun record(serviceName: String?, transportProtocol: Protocol, portNumber: Long): Record? {
+        val filter = RecordFilter(
+                services = if (serviceName != null) listOf(serviceName) else emptyList(),
+                protocols = listOf(transportProtocol),
+                ports = listOf(portNumber))
+        val fullListOfRecords = registryClient.query(filter)
+        return when {
+            fullListOfRecords.isEmpty() -> null
+            else -> fullListOfRecords.first()
+        }
+    }
+
     fun records(filter: RecordFilter?): List<Record> {
-        val fullListOfRecords: List<Record> = registryClient.query(filter)
+        val fullListOfRecords = registryClient.query(filter).toList()
         return if (filter == null) {
             fullListOfRecords
         } else {
