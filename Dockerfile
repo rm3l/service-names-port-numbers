@@ -38,7 +38,7 @@ MAINTAINER Armel Soro <armel@rm3l.org>
 ENV JAVA_OPTS=""
 WORKDIR /root/
 COPY --from=BUILD_IMAGE \
-    /code/iana-service-names-port-numbers/application/build/libs/iana-service-names-port-numbers-app-0.1.4.jar \
+    /code/iana-service-names-port-numbers/application/build/libs/iana-service-names-port-numbers-app-0.1.5.jar \
     ./iana-service-names-port-numbers-app.jar
 EXPOSE 8080
 EXPOSE 8081

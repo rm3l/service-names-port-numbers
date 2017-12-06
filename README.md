@@ -58,14 +58,14 @@ The library is published on Bintray JCenter. So importing it should be straightf
 <dependency>
   <groupId>org.rm3l.iana</groupId>
   <artifactId>iana-service-names-port-numbers-client</artifactId>
-  <version>0.1.4</version>
+  <version>0.1.5</version>
 </dependency>
 ```
 
 ##### Gradle
 
 ```groovy
-compile 'org.rm3l.iana:iana-service-names-port-numbers-client:0.1.4'
+compile 'org.rm3l.iana:iana-service-names-port-numbers-client:0.1.5'
 ```
 
 #### Usage
@@ -154,7 +154,7 @@ You will then find the artifacts in the sub-projects `build` directories:
 Running the app is as simple as issuing the following command:
 
 ```bash
-java -jar ./application/build/libs/iana-service-names-port-numbers-app-0.1.4.jar
+java -jar ./application/build/libs/iana-service-names-port-numbers-app-0.1.5.jar
 ```
 
 Then navigate to http://localhost:8080/graphiql to start exploring the GraphQL API.
@@ -165,7 +165,7 @@ For example, to make the service listen on port `8888` instead, run:
 ```bash
 java \
  -Dserver.port=8888 \
- -jar ./application/build/libs/iana-service-names-port-numbers-app-0.1.4.jar
+ -jar ./application/build/libs/iana-service-names-port-numbers-app-0.1.5.jar
 ```
 
 #### Querying the GraphQL API

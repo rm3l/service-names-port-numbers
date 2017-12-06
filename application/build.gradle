@@ -52,7 +52,7 @@ apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 
 group = 'org.rm3l.iana'
-version = '0.1.4'
+version = '0.1.5'
 sourceCompatibility = 1.8
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"
