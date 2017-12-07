@@ -5,7 +5,7 @@
 
 [![Travis branch](https://img.shields.io/travis/rm3l/service-names-port-numbers/master.svg)](https://travis-ci.org/rm3l/service-names-port-numbers)
 
-[![Heroku](http://heroku-badge.herokuapp.com/?app=service-name-port-number&root=graphiql&style=flat&svg=1)](https://service-name-port-number.herokuapp.com/graphiql)
+[![Heroku](http://heroku-badge.herokuapp.com/?app=service-names-port-numbers&root=graphiql&style=flat&svg=1)](https://service-names-port-numbers.herokuapp.com/graphiql)
 
 [![Docker Automated build](https://img.shields.io/docker/automated/rm3l/service-names-port-numbers.svg)](https://hub.docker.com/r/rm3l/service-names-port-numbers) 
 [![Docker Build Status](https://img.shields.io/docker/build/rm3l/service-names-port-numbers.svg)](https://hub.docker.com/r/rm3l/service-names-port-numbers) 
@@ -33,14 +33,14 @@ And [GraphQL](http://graphql.org) is a data query language allowing clients to d
 and exactly the same structure of the data is returned from the server. It is a strongly typed runtime which allows 
 clients to dictate what data is needed.
 
-* Live Server on Heroku PaaS: https://service-name-port-number.herokuapp.com/graphiql
+* Live Server on Heroku PaaS: https://service-names-port-numbers.herokuapp.com/graphiql
 * Download IANA Database: https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml
 
 ## Usage
 
 ### Live Server
 
-A live running version of the GraphQL API is available on Heroku: https://service-name-port-number.herokuapp.com/graphiql
+A live running version of the GraphQL API is available on Heroku: https://service-names-port-numbers.herokuapp.com/graphiql
 
 Note that this API operates entirely from memory, and auto-updates itself every 12 hours.
 
