@@ -28,10 +28,7 @@ import org.rm3l.servicenamesportnumbers.domain.Protocol
 import org.rm3l.servicenamesportnumbers.domain.Record
 import org.rm3l.servicenamesportnumbers.domain.RecordFilter
 import org.rm3l.servicenamesportnumbers.parsers.ServiceNamesPortNumbersMappingParser
-import org.rm3l.servicenamesportnumbers.parsers.impl.IANAXmlServiceNamesPortNumbersParser
-import org.rm3l.servicenamesportnumbers.parsers.impl.IANA_XML_DB_URL
-import org.rm3l.servicenamesportnumbers.parsers.impl.NMAP_SERVICES_DB_URL
-import org.rm3l.servicenamesportnumbers.parsers.impl.NmapServicesParser
+import org.rm3l.servicenamesportnumbers.parsers.impl.*
 import java.io.File
 import java.net.URI
 import java.net.URL
@@ -66,7 +63,13 @@ class ServiceNamesPortNumbersClient private constructor(
             }
             .build<Pair<URL, ServiceNamesPortNumbersMappingParser>, Set<Record>> { urlParserPair ->
                 println("Loading data from '${urlParserPair.first}' ...")
-                urlParserPair.second.parse(urlParserPair.first.readText()).toSet()
+                urlParserPair.second.parse(urlParserPair.first.readText())
+                        .toSet()
+                        .map { record ->
+                            record.datasource = urlParserPair.first.toString()
+                            record
+                        }
+                        .toSet()
             }
 
     private val recordsCache = Caffeine
@@ -75,15 +78,25 @@ class ServiceNamesPortNumbersClient private constructor(
             .maximumSize(Math.max(this.cacheMaximumSize/2, 10L))
             .build<RecordFilter, Collection<Record>> { filter ->
                 val fullRecords = this.databaseAndParserMap
+                        .filterKeys { if (filter.isEmpty()) true else
+                            (filter.datasources == null ||
+                                    filter.datasources.isEmpty() ||
+                                    filter.datasources.contains(it.toString())) }
                         .flatMap { this.cache.get(it.toPair())?: emptySet() }
                         .toSet()
                 if (filter.isEmpty()) {
                     fullRecords
                 } else {
                     fullRecords
-                            .filter { filter.ports == null || filter.ports.isEmpty() || filter.ports.contains(it.portNumber) }
-                            .filter { filter.protocols == null || filter.protocols.isEmpty() || filter.protocols.contains(it.transportProtocol) }
-                            .filter { filter.services == null || filter.services.isEmpty() || filter.services.contains(it.serviceName) }
+                            .filter { filter.ports == null ||
+                                    filter.ports.isEmpty() ||
+                                    filter.ports.contains(it.portNumber) }
+                            .filter { filter.protocols == null ||
+                                    filter.protocols.isEmpty() ||
+                                    filter.protocols.contains(it.transportProtocol) }
+                            .filter { filter.services == null ||
+                                    filter.services.isEmpty() ||
+                                    filter.services.contains(it.serviceName) }
                 }
             }
 
@@ -243,6 +256,13 @@ class ServiceNamesPortNumbersClient private constructor(
         fun withNmapServicesDatabase() = this.addDatabaseAndParser(
                 URL(NMAP_SERVICES_DB_URL),
                 NmapServicesParser())
+
+        /**
+         * Use the local /etc/services file. Note that this is platform specific.
+         */
+        fun withLocalEtcServicesDatabase() = this.addDatabaseAndParser(
+                LocalEtcServicesParser.ETC_SERVICES_FILE,
+                LocalEtcServicesParser())
 
         /**
          * Add a database URL to fetch, along with its parser

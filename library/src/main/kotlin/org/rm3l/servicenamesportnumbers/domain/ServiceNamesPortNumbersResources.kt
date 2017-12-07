@@ -100,7 +100,18 @@ data class Record(
         /**
          * the assignment notes of the record
          */
-        val assignmentNotes: String? = null)
+        val assignmentNotes: String? = null,
+
+        /**
+         * the service alias
+         */
+        val serviceAlias: String? = null,
+
+        /**
+         * where the record comes from
+         */
+        var datasource: String? = null
+)
 
 /**
  * Person
@@ -160,7 +171,12 @@ enum class Protocol {
     /**
      * Stream Control Transmission Protocol
      */
-    SCTP
+    SCTP,
+
+    /**
+     * Datagram Delivery Protocol
+     */
+    DDP
 }
 
 /**
@@ -171,6 +187,12 @@ enum class Protocol {
  * @param ports the list of ports to lookup
  */
 data class RecordFilter(
+
+        /**
+         * the list of datasources to consider
+         */
+        val datasources: List<String>? = null,
+
         /**
          * the list of service names to lookup
          */
@@ -194,6 +216,7 @@ data class RecordFilter(
         return services?.isEmpty()?:true
                 && protocols?.isEmpty()?:true
                 && ports?.isEmpty()?:true
+                && datasources?.isEmpty()?:true
     }
 
     companion object {

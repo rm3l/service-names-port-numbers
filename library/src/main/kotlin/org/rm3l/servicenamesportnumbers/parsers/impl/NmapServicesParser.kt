@@ -6,6 +6,10 @@ import org.rm3l.servicenamesportnumbers.parsers.ServiceNamesPortNumbersMappingPa
 
 const val NMAP_SERVICES_DB_URL = "https://svn.nmap.org/nmap/nmap-services"
 
+/**
+ * Parser for the Nmap Service Database,
+ * located at https://svn.nmap.org/nmap/nmap-services
+ */
 class NmapServicesParser: ServiceNamesPortNumbersMappingParser {
 
     override fun parse(content: String): List<Record> {
@@ -16,7 +20,10 @@ class NmapServicesParser: ServiceNamesPortNumbersMappingParser {
                 .filterNot { it.startsWith("#") }
                 .filterNot { it.isBlank() }
                 .forEach { line ->
-                    val lineComponents = line.split("\t", limit = 4).map { it.trim() }
+                    val lineComponents = line
+                            .split("\t")
+                            .map { it.trim() }
+                            .filter { it.isNotBlank() }
                     val serviceName = lineComponents[0]
                     val portNumberAndProtocol = lineComponents[1].split("/")
                     val portNumber = portNumberAndProtocol[0].trim().toLong()

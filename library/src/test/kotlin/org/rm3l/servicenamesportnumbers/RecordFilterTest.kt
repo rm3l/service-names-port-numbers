@@ -32,10 +32,18 @@ class RecordFilterTest {
 
     @Test
     fun testEquality() {
-        val filter1 = RecordFilter(listOf("service1", "service2"), listOf(Protocol.TCP), listOf(10L))
-        val filter2 = RecordFilter(listOf("service1", "service2"), listOf(Protocol.TCP), listOf(10L))
-        val filter3 = RecordFilter(listOf("service1", "service2"), listOf(Protocol.SCTP), listOf(10L))
-        val filter4 = RecordFilter(listOf("service1"), listOf(Protocol.TCP), listOf(10L))
+        val filter1 = RecordFilter(services = listOf("service1", "service2"),
+                protocols = listOf(Protocol.TCP),
+                ports = listOf(10L))
+        val filter2 = RecordFilter(services = listOf("service1", "service2"),
+                protocols = listOf(Protocol.TCP),
+                ports = listOf(10L))
+        val filter3 = RecordFilter(services = listOf("service1", "service2"),
+                protocols = listOf(Protocol.SCTP),
+                ports = listOf(10L))
+        val filter4 = RecordFilter(services = listOf("service1"),
+                protocols = listOf(Protocol.TCP),
+                ports = listOf(10L))
         Assert.assertEquals(filter1, filter2)
         Assert.assertNotEquals(filter1, filter3)
         Assert.assertNotEquals(filter1, filter4)

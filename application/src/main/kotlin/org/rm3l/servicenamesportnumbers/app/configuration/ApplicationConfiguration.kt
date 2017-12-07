@@ -38,11 +38,15 @@ class ApplicationConfiguration {
     @Value("\${cache.expirationDays}")
     lateinit var cacheExpirationDays: String
 
+    @Value("\${datasources.etc_services}")
+    lateinit var localEtcServicesDatabase: String
+
     @Bean(initMethod = "refreshCache", destroyMethod = "invalidateCache")
     fun registryClient() = ServiceNamesPortNumbersClient
             .builder()
             .withIANADatabase()
             .withNmapServicesDatabase()
+            .also { if (localEtcServicesDatabase.toBoolean()) it.withLocalEtcServicesDatabase() }
             .cacheMaximumSize(this.cacheMaximumSize.toLong())
             .cacheExpiration(this.cacheExpirationDays.toLong(), TimeUnit.DAYS)
             .build()

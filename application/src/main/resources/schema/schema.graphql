@@ -19,6 +19,9 @@ type Record {
     # Service Name
     serviceName: String,
 
+    # Service Alias
+    serviceAlias: String,
+
     # Transport Protocol
     transportProtocol: Protocol
 
@@ -36,14 +39,28 @@ type Record {
 
     # Contact Person
     contact: Person
+
+    # Datasource: where the record comes from
+    datasource: String
 }
 
 # Transport Protocol
 enum Protocol {
+
+    # Transmission Control Protocol
     TCP
+
+    # User Datagram Protocol
     UDP
+
+    # Datagram Congestion Control Protocol
     DCCP
+
+    # Stream Control Transmission Protocol
     SCTP
+
+    # Datagram Delivery Protocol
+    DDP
 }
 
 # Filter
@@ -57,6 +74,9 @@ input RecordFilter {
 
     # Service Names
     services: [String]
+
+    # Datasources full URLs, e.g., file:/etc/services
+    datasources: [String]
 }
 
 # Person
