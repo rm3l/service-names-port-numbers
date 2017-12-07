@@ -21,29 +21,19 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-package org.rm3l.iana.servicenamesportnumbers.app.configuration
+package org.rm3l.servicenamesportnumbers.app
 
-import org.rm3l.iana.servicenamesportnumbers.IANAServiceNamesPortNumbersClient
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
-import java.util.concurrent.TimeUnit
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.junit4.SpringRunner
 
-@Configuration
-class ApplicationConfiguration {
+@RunWith(SpringRunner::class)
+@SpringBootTest
+class ServiceNamesPortNumbersApplicationTests {
 
-    @Value("\${cache.maximum-size}")
-    lateinit var cacheMaximumSize: String
+    @Test
+    fun contextLoads() {
+    }
 
-    @Value("\${cache.expirationDays}")
-    lateinit var cacheExpirationDays: String
-
-    @Bean(initMethod = "refreshCache", destroyMethod = "invalidateCache")
-    fun registryClient() = IANAServiceNamesPortNumbersClient
-            .builder()
-            .withIANADatabase()
-            .withNmapServicesDatabase()
-            .cacheMaximumSize(this.cacheMaximumSize.toLong())
-            .cacheExpiration(this.cacheExpirationDays.toLong(), TimeUnit.DAYS)
-            .build()
 }

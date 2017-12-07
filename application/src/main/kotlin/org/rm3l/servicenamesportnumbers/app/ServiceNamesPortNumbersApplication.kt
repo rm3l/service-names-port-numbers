@@ -21,19 +21,24 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-package org.rm3l.iana.servicenamesportnumbers.app
+@file:JvmName("ServiceNamesPortNumbersGraphQLApi")
 
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.junit4.SpringRunner
+package org.rm3l.servicenamesportnumbers.app
 
-@RunWith(SpringRunner::class)
-@SpringBootTest
-class ServiceNamesPortNumbersApplicationTests {
+import org.springframework.boot.SpringApplication
+import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.context.annotation.PropertySource
+import org.springframework.context.annotation.PropertySources
 
-    @Test
-    fun contextLoads() {
-    }
+@SpringBootApplication
+@PropertySources(value = [
+    //The order matters here. If a same property key is found in many files, the last one wins.
+    PropertySource(value = ["classpath:application.properties"]),
+    PropertySource(value = ["file:/etc/rm3l/service-names-port-numbers-app.properties"], ignoreResourceNotFound = true)
+])
+class ServiceNamesPortNumbersApplication
 
+@Suppress("unused")
+fun main(args: Array<String>) {
+    SpringApplication.run(ServiceNamesPortNumbersApplication::class.java, *args)
 }

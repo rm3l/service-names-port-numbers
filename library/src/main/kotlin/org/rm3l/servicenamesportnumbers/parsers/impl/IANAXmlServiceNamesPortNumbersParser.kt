@@ -21,11 +21,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-package org.rm3l.iana.servicenamesportnumbers.parsers.impl
+package org.rm3l.servicenamesportnumbers.parsers.impl
 
-import org.rm3l.iana.servicenamesportnumbers.domain.Protocol
-import org.rm3l.iana.servicenamesportnumbers.domain.Record
-import org.rm3l.iana.servicenamesportnumbers.parsers.ServiceNamesPortNumbersMappingParser
+import org.rm3l.servicenamesportnumbers.domain.Protocol
+import org.rm3l.servicenamesportnumbers.domain.Record
+import org.rm3l.servicenamesportnumbers.parsers.ServiceNamesPortNumbersMappingParser
 import org.w3c.dom.Element
 import org.w3c.dom.Node
 import javax.xml.parsers.DocumentBuilderFactory

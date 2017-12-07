@@ -21,28 +21,29 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-package org.rm3l.iana.servicenamesportnumbers.app.scheduling
+package org.rm3l.servicenamesportnumbers.app.configuration
 
-import org.rm3l.iana.servicenamesportnumbers.IANAServiceNamesPortNumbersClient
-import org.slf4j.LoggerFactory
-import org.springframework.scheduling.annotation.Scheduled
-import org.springframework.stereotype.Component
+import org.rm3l.servicenamesportnumbers.ServiceNamesPortNumbersClient
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import java.util.concurrent.TimeUnit
 
-@Component
-class ScheduledTasks(val registryClient: IANAServiceNamesPortNumbersClient) {
+@Configuration
+class ApplicationConfiguration {
 
-    private val logger = LoggerFactory.getLogger(ScheduledTasks::class.java)
+    @Value("\${cache.maximum-size}")
+    lateinit var cacheMaximumSize: String
 
-    @Scheduled(cron = "\${cacheRefresh.cron.expression}")
-    fun refreshCache() {
-        try {
-            logger.info("Updating DB ... ")
-            registryClient.refreshCache()
-            logger.info("... Task scheduled. Will be refreshed soon.")
-        } catch (e: Exception) {
-            if (logger.isDebugEnabled) {
-                logger.debug(e.message, e)
-            }
-        }
-    }
+    @Value("\${cache.expirationDays}")
+    lateinit var cacheExpirationDays: String
+
+    @Bean(initMethod = "refreshCache", destroyMethod = "invalidateCache")
+    fun registryClient() = ServiceNamesPortNumbersClient
+            .builder()
+            .withIANADatabase()
+            .withNmapServicesDatabase()
+            .cacheMaximumSize(this.cacheMaximumSize.toLong())
+            .cacheExpiration(this.cacheExpirationDays.toLong(), TimeUnit.DAYS)
+            .build()
 }

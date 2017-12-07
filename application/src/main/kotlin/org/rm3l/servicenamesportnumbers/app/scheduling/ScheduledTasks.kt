@@ -21,24 +21,28 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-@file:JvmName("ServiceNamesPortNumbersGraphQLApi")
+package org.rm3l.servicenamesportnumbers.app.scheduling
 
-package org.rm3l.iana.servicenamesportnumbers.app
+import org.rm3l.servicenamesportnumbers.ServiceNamesPortNumbersClient
+import org.slf4j.LoggerFactory
+import org.springframework.scheduling.annotation.Scheduled
+import org.springframework.stereotype.Component
 
-import org.springframework.boot.SpringApplication
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.context.annotation.PropertySource
-import org.springframework.context.annotation.PropertySources
+@Component
+class ScheduledTasks(val registryClient: ServiceNamesPortNumbersClient) {
 
-@SpringBootApplication
-@PropertySources(value = [
-    //The order matters here. If a same property key is found in many files, the last one wins.
-    PropertySource(value = ["classpath:application.properties"]),
-    PropertySource(value = ["file:/etc/iana/service-names-port-numbers-app.properties"], ignoreResourceNotFound = true)
-])
-class ServiceNamesPortNumbersApplication
+    private val logger = LoggerFactory.getLogger(ScheduledTasks::class.java)
 
-@Suppress("unused")
-fun main(args: Array<String>) {
-    SpringApplication.run(ServiceNamesPortNumbersApplication::class.java, *args)
+    @Scheduled(cron = "\${cacheRefresh.cron.expression}")
+    fun refreshCache() {
+        try {
+            logger.info("Updating DB ... ")
+            registryClient.refreshCache()
+            logger.info("... Task scheduled. Will be refreshed soon.")
+        } catch (e: Exception) {
+            if (logger.isDebugEnabled) {
+                logger.debug(e.message, e)
+            }
+        }
+    }
 }

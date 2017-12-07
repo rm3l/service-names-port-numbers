@@ -24,6 +24,6 @@ SOFTWARE.
 include ':library'
 include ':application'
 
-rootProject.name = 'iana-service-names-port-numbers'
-project(":library").name = 'iana-service-names-port-numbers-client'
-project(":application").name = 'iana-service-names-port-numbers-app'
+rootProject.name = 'service-names-port-numbers'
+project(":library").name = 'service-names-port-numbers-library'
+project(":application").name = 'service-names-port-numbers-app'

@@ -51,7 +51,7 @@ apply plugin: 'kotlin-spring'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 
-group = 'org.rm3l.iana'
+group = 'org.rm3l'
 version = '0.1.5'
 sourceCompatibility = 1.8
 compileKotlin {
@@ -67,7 +67,7 @@ repositories {
 }
 
 dependencies {
-    compile project(':iana-service-names-port-numbers-client')
+    compile project(':service-names-port-numbers-library')
     compile('org.springframework.boot:spring-boot-starter-security')
     compile('org.springframework.boot:spring-boot-starter-web')
     compile('org.springframework.boot:spring-boot-starter-actuator')

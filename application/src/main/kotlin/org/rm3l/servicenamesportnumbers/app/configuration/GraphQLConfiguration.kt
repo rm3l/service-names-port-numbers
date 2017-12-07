@@ -21,19 +21,31 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-@file:JvmName("ServiceNamesPortNumbersMappingParser")
-package org.rm3l.iana.servicenamesportnumbers.parsers
+package org.rm3l.servicenamesportnumbers.app.configuration
 
-import org.rm3l.iana.servicenamesportnumbers.domain.Record
+import com.coxautodev.graphql.tools.SchemaParser
+import graphql.schema.GraphQLSchema
+import org.rm3l.servicenamesportnumbers.ServiceNamesPortNumbersClient
+import org.rm3l.servicenamesportnumbers.app.resolvers.Query
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver
+import java.io.File
 
-/**
- * IANA Database resource parser
- */
-interface ServiceNamesPortNumbersMappingParser {
+@Configuration
+class GraphQLConfiguration(val registryClient: ServiceNamesPortNumbersClient) {
 
-    /**
-     * Parse the database [content]
-     * @return the complete list of records
-     */
-    fun parse(content: String): List<Record>
+    @Bean
+    fun graphQLSchema(): GraphQLSchema {
+        val allSchemas = PathMatchingResourcePatternResolver()
+                .getResources("/schema/**/*.graphql")
+                .map { "schema${File.separator}${it.filename}" }
+                .toList()
+        return SchemaParser.newParser()
+                .files(*allSchemas.toTypedArray())
+                .resolvers(Query(registryClient))
+                .build()
+                .makeExecutableSchema()
+    }
+
 }

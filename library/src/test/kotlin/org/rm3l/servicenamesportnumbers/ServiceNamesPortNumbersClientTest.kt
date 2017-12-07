@@ -21,27 +21,27 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-package org.rm3l.iana.servicenamesportnumbers
+package org.rm3l.servicenamesportnumbers
 
 import org.junit.Assert
 import org.junit.BeforeClass
 import org.junit.Test
-import org.rm3l.iana.servicenamesportnumbers.domain.Protocol
-import org.rm3l.iana.servicenamesportnumbers.domain.RecordFilter
+import org.rm3l.servicenamesportnumbers.domain.Protocol
+import org.rm3l.servicenamesportnumbers.domain.RecordFilter
 
 /**
  * Test class
  */
-class IANAServiceNamesPortNumbersClientTest {
+class ServiceNamesPortNumbersClientTest {
 
     companion object {
 
-        private var defaultClient: IANAServiceNamesPortNumbersClient? = null
+        private var defaultClient: ServiceNamesPortNumbersClient? = null
 
         @JvmStatic
         @BeforeClass
         fun beforeClass() {
-            this.defaultClient = IANAServiceNamesPortNumbersClient.builder().build()
+            defaultClient = ServiceNamesPortNumbersClient.builder().build()
         }
     }
 

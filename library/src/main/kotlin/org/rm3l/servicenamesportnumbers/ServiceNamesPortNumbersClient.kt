@@ -21,15 +21,17 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-package org.rm3l.iana.servicenamesportnumbers
+package org.rm3l.servicenamesportnumbers
 
 import com.github.benmanes.caffeine.cache.Caffeine
-import org.rm3l.iana.servicenamesportnumbers.domain.Protocol
-import org.rm3l.iana.servicenamesportnumbers.domain.Record
-import org.rm3l.iana.servicenamesportnumbers.domain.RecordFilter
-import org.rm3l.iana.servicenamesportnumbers.parsers.ServiceNamesPortNumbersMappingParser
-import org.rm3l.iana.servicenamesportnumbers.parsers.impl.IANAXmlServiceNamesPortNumbersParser
-import org.rm3l.iana.servicenamesportnumbers.parsers.impl.IANA_XML_DB_URL
+import org.rm3l.servicenamesportnumbers.domain.Protocol
+import org.rm3l.servicenamesportnumbers.domain.Record
+import org.rm3l.servicenamesportnumbers.domain.RecordFilter
+import org.rm3l.servicenamesportnumbers.parsers.ServiceNamesPortNumbersMappingParser
+import org.rm3l.servicenamesportnumbers.parsers.impl.IANAXmlServiceNamesPortNumbersParser
+import org.rm3l.servicenamesportnumbers.parsers.impl.IANA_XML_DB_URL
+import org.rm3l.servicenamesportnumbers.parsers.impl.NMAP_SERVICES_DB_URL
+import org.rm3l.servicenamesportnumbers.parsers.impl.NmapServicesParser
 import java.io.File
 import java.net.URI
 import java.net.URL
@@ -48,7 +50,7 @@ private const val DEFAULT_CACHE_EXPIRATION_DAYS = 1L
  * @constructor Creates the given client
  */
 @Suppress("unused")
-class IANAServiceNamesPortNumbersClient private constructor(
+class ServiceNamesPortNumbersClient private constructor(
         private val cacheMaximumSize: Long,
         private val cacheExpiration: Pair<Long, TimeUnit>,
         private val databaseAndParserMap: MutableMap<URL, ServiceNamesPortNumbersMappingParser> = mutableMapOf()) {
@@ -185,7 +187,7 @@ class IANAServiceNamesPortNumbersClient private constructor(
         private val IANA_XML_DB_PARSER = IANAXmlServiceNamesPortNumbersParser()
 
         /**
-         * Entry point for constructing a new instance of the [IANAServiceNamesPortNumbersClient].
+         * Entry point for constructing a new instance of the [ServiceNamesPortNumbersClient].
          * Contains by default the IANA XML Database, but you are free to add other parsers as needed.
          */
         @JvmStatic
@@ -193,7 +195,7 @@ class IANAServiceNamesPortNumbersClient private constructor(
     }
 
     /**
-     * Builder class for [IANAServiceNamesPortNumbersClient].
+     * Builder class for [ServiceNamesPortNumbersClient].
      * Do not forget to call [build] when done initializing the Builder
      *
      * To benefit from records caching, we recommend you reuse the same client instance for querying.
@@ -233,14 +235,14 @@ class IANAServiceNamesPortNumbersClient private constructor(
          */
         fun withIANADatabase() = this.addDatabaseAndParser(
                 URL(IANA_XML_DB_URL),
-                org.rm3l.iana.servicenamesportnumbers.IANAServiceNamesPortNumbersClient.IANA_XML_DB_PARSER)
+                IANA_XML_DB_PARSER)
 
         /**
          * Use the IANA Database
          */
         fun withNmapServicesDatabase() = this.addDatabaseAndParser(
-                URL(org.rm3l.iana.servicenamesportnumbers.parsers.impl.NMAP_SERVICES_DB_URL),
-                org.rm3l.iana.servicenamesportnumbers.parsers.impl.NmapServicesParser())
+                URL(NMAP_SERVICES_DB_URL),
+                NmapServicesParser())
 
         /**
          * Add a database URL to fetch, along with its parser
@@ -304,16 +306,16 @@ class IANAServiceNamesPortNumbersClient private constructor(
         }
 
         /**
-         * Construct a new instance of [IANAServiceNamesPortNumbersClient],
+         * Construct a new instance of [ServiceNamesPortNumbersClient],
          * with the parameters set beforehand, or with the default settings
          */
-        fun build(): IANAServiceNamesPortNumbersClient {
-            return IANAServiceNamesPortNumbersClient(
+        fun build(): ServiceNamesPortNumbersClient {
+            return ServiceNamesPortNumbersClient(
                     cacheMaximumSize = this.cacheMaximumSize ?: DEFAULT_CACHE_SIZE,
                     cacheExpiration = this.cacheExpiration ?: DEFAULT_CACHE_EXPIRATION_DAYS to TimeUnit.DAYS,
                     databaseAndParserMap = this.databaseAndParserMap
-                            .mapKeys { it.key?: URL(IANA_XML_DB_URL) }
-                            .mapValues { it.value?: IANA_XML_DB_PARSER }
+                            .mapKeys { it.key ?: URL(IANA_XML_DB_URL) }
+                            .mapValues { it.value ?: IANA_XML_DB_PARSER }
                             .toMutableMap()
             )
         }

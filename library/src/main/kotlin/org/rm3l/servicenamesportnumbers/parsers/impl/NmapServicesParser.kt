@@ -1,8 +1,8 @@
-package org.rm3l.iana.servicenamesportnumbers.parsers.impl
+package org.rm3l.servicenamesportnumbers.parsers.impl
 
-import org.rm3l.iana.servicenamesportnumbers.domain.Protocol
-import org.rm3l.iana.servicenamesportnumbers.domain.Record
-import org.rm3l.iana.servicenamesportnumbers.parsers.ServiceNamesPortNumbersMappingParser
+import org.rm3l.servicenamesportnumbers.domain.Protocol
+import org.rm3l.servicenamesportnumbers.domain.Record
+import org.rm3l.servicenamesportnumbers.parsers.ServiceNamesPortNumbersMappingParser
 
 const val NMAP_SERVICES_DB_URL = "https://svn.nmap.org/nmap/nmap-services"
 

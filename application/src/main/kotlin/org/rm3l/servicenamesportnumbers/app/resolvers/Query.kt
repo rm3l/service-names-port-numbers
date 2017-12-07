@@ -23,15 +23,15 @@ SOFTWARE.
  */
 @file:Suppress("unused")
 
-package org.rm3l.iana.servicenamesportnumbers.app.resolvers
+package org.rm3l.servicenamesportnumbers.app.resolvers
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver
-import org.rm3l.iana.servicenamesportnumbers.IANAServiceNamesPortNumbersClient
-import org.rm3l.iana.servicenamesportnumbers.domain.Protocol
-import org.rm3l.iana.servicenamesportnumbers.domain.Record
-import org.rm3l.iana.servicenamesportnumbers.domain.RecordFilter
+import org.rm3l.servicenamesportnumbers.ServiceNamesPortNumbersClient
+import org.rm3l.servicenamesportnumbers.domain.Protocol
+import org.rm3l.servicenamesportnumbers.domain.Record
+import org.rm3l.servicenamesportnumbers.domain.RecordFilter
 
-class Query(private val registryClient: IANAServiceNamesPortNumbersClient) : GraphQLQueryResolver {
+class Query(private val registryClient: ServiceNamesPortNumbersClient) : GraphQLQueryResolver {
 
     fun record(serviceName: String?, transportProtocol: Protocol, portNumber: Long): Record? {
         val filter = RecordFilter(

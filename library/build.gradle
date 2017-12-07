@@ -41,7 +41,7 @@ apply plugin: 'org.jetbrains.dokka'
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'maven'
 
-group = 'org.rm3l.iana'
+group = 'org.rm3l'
 version = '0.1.5'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -117,13 +117,13 @@ bintray {
 
     pkg {
         repo = 'maven'
-        name = 'org.rm3l.iana:service-names-port-numbers'
+        name = 'org.rm3l:service-names-port-numbers'
         labels = ['iana', 'lookup', 'services', 'ports']
 
         //noinspection GroovyAssignabilityCheck
         version {
             name = '0.1.5'
-            desc = 'IANA Service Names and Port Numbers Lookup library'
+            desc = 'Service Names and Port Numbers Lookup library'
             released = new Date()
             vcsTag = '0.1.5'
         }
@@ -131,9 +131,9 @@ bintray {
         publicDownloadNumbers = true
 
         licenses = ['MIT']
-        vcsUrl = 'https://github.com/rm3l/iana-service-names-port-numbers.git'
-        websiteUrl = 'https://github.com/rm3l/iana-service-names-port-numbers'
-        issueTrackerUrl = 'https://github.com/rm3l/iana-service-names-port-numbers/issues'
+        vcsUrl = 'https://github.com/rm3l/service-names-port-numbers.git'
+        websiteUrl = 'https://github.com/rm3l/service-names-port-numbers'
+        issueTrackerUrl = 'https://github.com/rm3l/service-names-port-numbers/issues'
 
     }
     configurations = ['archives']

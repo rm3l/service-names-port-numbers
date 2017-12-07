@@ -1,20 +1,21 @@
-# IANA Service Names And Port Numbers Lookup
+# Service Names And Port Numbers Lookup
 
-[![Bintray](https://img.shields.io/bintray/v/rm3l/maven/org.rm3l.iana:service-names-port-numbers.svg)](https://bintray.com/rm3l/maven/org.rm3l.iana%3Aservice-names-port-numbers) 
-[![License](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/rm3l/iana-service-names-port-numbers/blob/master/LICENSE) 
+[![Bintray](https://img.shields.io/bintray/v/rm3l/maven/org.rm3l:service-names-port-numbers.svg)](https://bintray.com/rm3l/maven/org.rm3l%3Aservice-names-port-numbers) 
+[![License](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/rm3l/service-names-port-numbers/blob/master/LICENSE) 
 
-[![Travis branch](https://img.shields.io/travis/rm3l/iana-service-names-port-numbers/master.svg)](https://travis-ci.org/rm3l/iana-service-names-port-numbers)
+[![Travis branch](https://img.shields.io/travis/rm3l/service-names-port-numbers/master.svg)](https://travis-ci.org/rm3l/service-names-port-numbers)
 
-[![Heroku](http://heroku-badge.herokuapp.com/?app=iana-service-name-port-number&root=graphiql&style=flat&svg=1)](https://iana-service-name-port-number.herokuapp.com/graphiql)
+[![Heroku](http://heroku-badge.herokuapp.com/?app=service-name-port-number&root=graphiql&style=flat&svg=1)](https://service-name-port-number.herokuapp.com/graphiql)
 
-[![Docker Automated build](https://img.shields.io/docker/automated/rm3l/iana-service-names-port-numbers.svg)](https://hub.docker.com/r/rm3l/iana-service-names-port-numbers) 
-[![Docker Build Status](https://img.shields.io/docker/build/rm3l/iana-service-names-port-numbers.svg)](https://hub.docker.com/r/rm3l/iana-service-names-port-numbers) 
-[![Docker Stars](https://img.shields.io/docker/stars/rm3l/iana-service-names-port-numbers.svg)](https://hub.docker.com/r/rm3l/iana-service-names-port-numbers) 
-[![Docker Pulls](https://img.shields.io/docker/pulls/rm3l/iana-service-names-port-numbers.svg)](https://hub.docker.com/r/rm3l/iana-service-names-port-numbers)
+[![Docker Automated build](https://img.shields.io/docker/automated/rm3l/service-names-port-numbers.svg)](https://hub.docker.com/r/rm3l/service-names-port-numbers) 
+[![Docker Build Status](https://img.shields.io/docker/build/rm3l/service-names-port-numbers.svg)](https://hub.docker.com/r/rm3l/service-names-port-numbers) 
+[![Docker Stars](https://img.shields.io/docker/stars/rm3l/service-names-port-numbers.svg)](https://hub.docker.com/r/rm3l/service-names-port-numbers) 
+[![Docker Pulls](https://img.shields.io/docker/pulls/rm3l/service-names-port-numbers.svg)](https://hub.docker.com/r/rm3l/service-names-port-numbers)
 
 Library and microservice for looking up inside the IANA Service Names And Port Numbers Registry records. 
 Written in [Kotlin](https://kotlinlang.org).
-It allows to lookup service names from port numbers, or vice-versa.
+It supports registering various datasources (IANA, Nmap Services, ...) 
+and allows to lookup service names from port numbers, or vice-versa.
 
 This library is an in-memory database that allows to lookup IANA records based upon certain filters (e.g., 
 service names, ports, transport protocols, ...).
@@ -32,14 +33,14 @@ And [GraphQL](http://graphql.org) is a data query language allowing clients to d
 and exactly the same structure of the data is returned from the server. It is a strongly typed runtime which allows 
 clients to dictate what data is needed.
 
-* Live Server on Heroku PaaS: https://iana-service-name-port-number.herokuapp.com/graphiql
+* Live Server on Heroku PaaS: https://service-name-port-number.herokuapp.com/graphiql
 * Download IANA Database: https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml
 
 ## Usage
 
 ### Live Server
 
-A live running version of the GraphQL API is available on Heroku: https://iana-service-name-port-number.herokuapp.com/graphiql
+A live running version of the GraphQL API is available on Heroku: https://service-name-port-number.herokuapp.com/graphiql
 
 Note that this API operates entirely from memory, and auto-updates itself every 12 hours.
 
@@ -56,8 +57,8 @@ The library is published on Bintray JCenter. So importing it should be straightf
 
 ```xml
 <dependency>
-  <groupId>org.rm3l.iana</groupId>
-  <artifactId>iana-service-names-port-numbers-client</artifactId>
+  <groupId>org.rm3l</groupId>
+  <artifactId>service-names-port-numbers-library</artifactId>
   <version>0.1.5</version>
 </dependency>
 ```
@@ -65,7 +66,7 @@ The library is published on Bintray JCenter. So importing it should be straightf
 ##### Gradle
 
 ```groovy
-compile 'org.rm3l.iana:iana-service-names-port-numbers-client:0.1.5'
+compile 'org.rm3l:service-names-port-numbers-library:0.1.5'
 ```
 
 #### Usage
@@ -74,65 +75,69 @@ This shows the basic usage of the library. Opening a database and querying.
 
 Example with Kotlin:
 ```kotlin
-import org.rm3l.iana.servicenamesportnumbers.IANAServiceNamesPortNumbersClient
-import org.rm3l.iana.servicenamesportnumbers.domain.Record
-import org.rm3l.iana.servicenamesportnumbers.domain.RecordFilter
-import org.rm3l.iana.servicenamesportnumbers.domain.Protocol
+import org.rm3l.servicenamesportnumbers.ServiceNamesPortNumbersClient
+import org.rm3l.servicenamesportnumbers.domain.Record
+import org.rm3l.servicenamesportnumbers.domain.RecordFilter
+import org.rm3l.servicenamesportnumbers.domain.Protocol
 
 fun main(args: Array<String>) {
 
-    val ianaClient = IANAServiceNamesPortNumbersClient
+    val serviceNamesPortNumbersClient = ServiceNamesPortNumbersClient
         .builder()
         //You may customize other parts here
         .build()
         
-    var records = ianaClient.query(443L) //records is a List<Record>
+    var records = serviceNamesPortNumbersClient.query(443L) //records is a List<Record>
     //Do something with the records
     
     //To benefit from caching, it is recommended you reuse the client instance
-    records = ianaClient.query("http")
+    records = serviceNamesPortNumbersClient.query("http")
     
     //You may pass in complex filters
-    records = ianaClient.query(
+    records = serviceNamesPortNumbersClient.query(
                 RecordFilter(
                     ports=listOf(80L, 443L, 2375L),
                     protocols=listOf(Protocol.TCP)))
     
     //Hot-update the database
-    ianaClient.updateDatabase(File("/path/to/my/local/iana-database.xml"))
+    serviceNamesPortNumbersClient.updateDatabase(
+                oldDatabase = File("/path/to/my/old/iana-database.xml"),
+                newDatabase = File("/path/to/my/local/iana-database.xml"))
 }
 ```
 
 Example with Java:
 ```java
-import org.rm3l.iana.servicenamesportnumbers.IANAServiceNamesPortNumbersClient;
-import org.rm3l.iana.servicenamesportnumbers.domain.*;
+import org.rm3l.servicenamesportnumbers.ServiceNamesPortNumbersClient;
+import org.rm3l.servicenamesportnumbers.domain.*;
 import java.util.*;
 
 public class MyService {
     
     public static void main(String... args) {
 
-        final IANAServiceNamesPortNumbersClient ianaClient = IANAServiceNamesPortNumbersClient
+        final ServiceNamesPortNumbersClient serviceNamesPortNumbersClient = ServiceNamesPortNumbersClient
             .builder()
             //You may customize other parts here
             .build();
         
-        List<Record> records = ianaClient.query(443L);
+        List<Record> records = serviceNamesPortNumbersClient.query(443L);
         //Do something with the records
         
         //To benefit from caching, it is recommended you reuse the client instance
-        records = ianaClient.query("http");
+        records = serviceNamesPortNumbersClient.query("http");
         
         //You may pass in complex filters
-        records = ianaClient.query(
+        records = serviceNamesPortNumbersClient.query(
                     new RecordFilter(
                         null,
                         Collections.singletonList(Protocol.TCP),
                         Arrays.asList(80L, 443L, 2375L)));
         
         //Hot-update the database
-        ianaClient.updateDatabase(new File("/path/to/my/local/iana-database.xml"));
+        serviceNamesPortNumbersClient.updateDatabase(
+                (new File("/path/to/my/old/iana-database.xml"),
+                new File("/path/to/my/local/iana-database.xml"));
     }
 }
 ```
@@ -154,7 +159,7 @@ You will then find the artifacts in the sub-projects `build` directories:
 Running the app is as simple as issuing the following command:
 
 ```bash
-java -jar ./application/build/libs/iana-service-names-port-numbers-app-0.1.5.jar
+java -jar ./application/build/libs/service-names-port-numbers-app-0.1.5.jar
 ```
 
 Then navigate to http://localhost:8080/graphiql to start exploring the GraphQL API.
@@ -165,7 +170,7 @@ For example, to make the service listen on port `8888` instead, run:
 ```bash
 java \
  -Dserver.port=8888 \
- -jar ./application/build/libs/iana-service-names-port-numbers-app-0.1.5.jar
+ -jar ./application/build/libs/service-names-port-numbers-app-0.1.5.jar
 ```
 
 #### Querying the GraphQL API
@@ -214,16 +219,16 @@ Date: Sun, 03 Dec 2017 22:22:11 GMT
 
 #### Docker
 
-A Docker repository with the microservice can be found here: https://hub.docker.com/r/rm3l/iana-service-names-port-numbers/
+A Docker repository with the microservice can be found here: https://hub.docker.com/r/rm3l/service-names-port-numbers/
 
 To fetch the docker image, run: 
 ```bash
-docker pull rm3l/iana-service-names-port-numbers
+docker pull rm3l/service-names-port-numbers
 ```
 
 To run the server with the default options and expose it on ports 8080 (and port 8081, for the management endpoints), run:
 ```bash
-docker run -p 8080:8080 -p 8081:8081 --rm rm3l/iana-service-names-port-numbers
+docker run -p 8080:8080 -p 8081:8081 --rm rm3l/service-names-port-numbers
 ```
 
 Then open http://localhost:8080/graphiql on your favorite browser, to start exploring the GraphQL API.
