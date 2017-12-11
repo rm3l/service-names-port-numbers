@@ -12,6 +12,27 @@
 [![Docker Stars](https://img.shields.io/docker/stars/rm3l/service-names-port-numbers.svg)](https://hub.docker.com/r/rm3l/service-names-port-numbers) 
 [![Docker Pulls](https://img.shields.io/docker/pulls/rm3l/service-names-port-numbers.svg)](https://hub.docker.com/r/rm3l/service-names-port-numbers)
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Usage](#usage)
+  - [Live Server](#live-server)
+  - [Using the library](#using-the-library)
+    - [Adding the dependency](#adding-the-dependency)
+      - [Maven](#maven)
+      - [Gradle](#gradle)
+    - [Usage](#usage-1)
+  - [Using the server](#using-the-server)
+    - [Downloading and building](#downloading-and-building)
+    - [Querying the GraphQL API](#querying-the-graphql-api)
+    - [Docker](#docker)
+- [In use in the following apps/services](#in-use-in-the-following-appsservices)
+- [Developed by](#developed-by)
+- [License](#license)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 Library and microservice for looking up inside the IANA Service Names And Port Numbers Registry records. 
 Written in [Kotlin](https://kotlinlang.org).
 It supports registering various datasources (IANA, Nmap Services, ...) 
