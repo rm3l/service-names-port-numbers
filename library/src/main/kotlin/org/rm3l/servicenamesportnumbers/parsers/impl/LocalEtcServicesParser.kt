@@ -46,7 +46,7 @@ class LocalEtcServicesParser: ServiceNamesPortNumbersMappingParser {
                         description = lineComponents[3].substring("# ".length)
                     } else if (lineComponents.size == 3) {
                         val lineItem = lineComponents[2]
-                        if (lineItem.startsWith("#")) {
+                        if (lineItem.startsWith("# ")) {
                             description = lineItem.substring("# ".length)
                         } else {
                             serviceAlias = lineItem
