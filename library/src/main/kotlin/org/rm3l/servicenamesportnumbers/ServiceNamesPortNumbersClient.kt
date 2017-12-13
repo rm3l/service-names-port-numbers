@@ -82,7 +82,17 @@ class ServiceNamesPortNumbersClient private constructor(
                             (filter.datasources == null ||
                                     filter.datasources.isEmpty() ||
                                     filter.datasources.contains(it.toString())) }
-                        .flatMap { this.cache.get(it.toPair())?: emptySet() }
+                        .flatMap { item ->
+                                  var records: Collection<Record>
+                                  try {
+                                    records = this.cache.get(it.toPair())
+                                  } catch (e: Exception) {
+                                    //Exception while trying to load item => invalidate key
+                                    this.cache.invalidate(it.toPair())
+                                    records = emptySet()
+                                  }
+                                  records
+                        }
                         .toSet()
                 if (filter.isEmpty()) {
                     fullRecords
