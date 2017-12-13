@@ -84,11 +84,12 @@ class ServiceNamesPortNumbersClient private constructor(
                                     filter.datasources.contains(it.toString())) }
                         .flatMap { item ->
                                   var records: Set<Record>? = null
+                                  val asPair = item.toPair()
                                   try {
-                                    records = this.cache.get(it.toPair())
+                                    records = this.cache.get(asPair)
                                   } catch (e: Exception) {
                                     //Exception while trying to load item => invalidate key
-                                    this.cache.invalidate(it.toPair())
+                                    this.cache.invalidate(asPair)
                                   }
                                   records?:emptySet()
                         }
