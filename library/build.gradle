@@ -42,7 +42,7 @@ apply plugin: 'com.jfrog.bintray'
 apply plugin: 'maven'
 
 group = 'org.rm3l'
-version = '0.1.8'
+version = '0.1.9'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 compileKotlin {
@@ -122,10 +122,10 @@ bintray {
 
         //noinspection GroovyAssignabilityCheck
         version {
-            name = '0.1.8'
+            name = '0.1.9'
             desc = 'Service Names and Port Numbers Lookup library'
             released = new Date()
-            vcsTag = '0.1.8'
+            vcsTag = '0.1.9'
         }
 
         publicDownloadNumbers = true
