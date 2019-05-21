@@ -260,7 +260,7 @@ Then open http://localhost:8080/graphiql on your favorite browser, to start expl
 (If you use this library and/or the microservice, please drop me a line at &lt;armel@rm3l.org&gt; 
 (or again, fork, modify this file and submit a pull request), so I can list your app(s) here)
 
-* [DD-WRT Companion](http://ddwrt-companion.rm3l.org), to provide comprehensive insights about IP Connections
+* [DD-WRT Companion](https://ddwrt-companion.app), to provide comprehensive insights about IP Connections
 * [Androcker](https://play.google.com/store/apps/details?id=org.rm3l.container_companion), a companion app for Docker
 
 
