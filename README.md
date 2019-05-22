@@ -5,7 +5,7 @@
 
 [![Travis branch](https://img.shields.io/travis/rm3l/service-names-port-numbers/master.svg)](https://travis-ci.org/rm3l/service-names-port-numbers)
 
-[![Heroku](http://heroku-badge.herokuapp.com/?app=service-names-port-numbers&root=graphiql&style=flat&svg=1)](https://service-names-port-numbers.herokuapp.com/graphiql)
+[![Heroku](https://img.shields.io/badge/heroku-deployed%20on%20free%20dyno-blue.svg)](https://service-names-port-numbers.herokuapp.com/graphiql)
 
 [![Docker Automated build](https://img.shields.io/docker/automated/rm3l/service-names-port-numbers.svg)](https://hub.docker.com/r/rm3l/service-names-port-numbers) 
 [![Docker Build Status](https://img.shields.io/docker/build/rm3l/service-names-port-numbers.svg)](https://hub.docker.com/r/rm3l/service-names-port-numbers) 
