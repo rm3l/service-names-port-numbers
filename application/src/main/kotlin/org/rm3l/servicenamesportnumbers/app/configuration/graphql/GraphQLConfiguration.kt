@@ -21,7 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-package org.rm3l.servicenamesportnumbers.app.configuration
+package org.rm3l.servicenamesportnumbers.app.configuration.graphql
 
 import com.coxautodev.graphql.tools.SchemaParser
 import graphql.schema.GraphQLSchema
@@ -38,7 +38,7 @@ class GraphQLConfiguration(val registryClient: ServiceNamesPortNumbersClient) {
     @Bean
     fun graphQLSchema(): GraphQLSchema {
         val allSchemas = PathMatchingResourcePatternResolver()
-                .getResources("/schema/**/*.graphql")
+                .getResources("/schema/**/*.graphqls")
                 .map { "schema${File.separator}${it.filename}" }
                 .toList()
         return SchemaParser.newParser()
