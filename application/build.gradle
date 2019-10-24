@@ -35,7 +35,7 @@ buildscript {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
         classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
-        classpath 'io.spring.gradle:propdeps-plugin:0.0.9.RELEASE'
+        classpath 'io.spring.gradle:propdeps-plugin:0.0.10.RELEASE'
     }
 }
 
