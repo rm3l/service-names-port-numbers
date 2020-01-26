@@ -20,7 +20,7 @@
 #OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #SOFTWARE.
 
-FROM adoptopenjdk:11-jdk-openj9 AS BUILD_IMAGE
+FROM adoptopenjdk:13-jdk-openj9 AS BUILD_IMAGE
 MAINTAINER Armel Soro <armel@rm3l.org>
 ARG GRADLE_OPTS="-Dorg.gradle.daemon=false"
 #ARG GRADLE_OPTS="$GRADLE_OPTS -Dkotlin.incremental=false -Dkotlin.compiler.execution.strategy=in-process"
@@ -32,7 +32,7 @@ COPY . .
 RUN chmod 755 ./gradlew
 RUN ./gradlew build --stacktrace
 
-FROM adoptopenjdk:11-jre-openj9
+FROM adoptopenjdk:13-jdk-openj9
 MAINTAINER Armel Soro <armel@rm3l.org>
 ENV JAVA_OPTS=""
 WORKDIR /root/
