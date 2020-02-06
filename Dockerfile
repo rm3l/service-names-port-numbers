@@ -37,7 +37,7 @@ MAINTAINER Armel Soro <armel@rm3l.org>
 ENV JAVA_OPTS=""
 WORKDIR /root/
 COPY --from=BUILD_IMAGE \
-    /code/service-names-port-numbers/application/build/libs/service-names-port-numbers-app-0.2.0.jar \
+    /code/service-names-port-numbers/application/build/libs/service-names-port-numbers-app-0.3.0.jar \
     ./service-names-port-numbers-app.jar
 EXPOSE 8080
 EXPOSE 8081
