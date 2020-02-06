@@ -54,10 +54,10 @@ dependencies {
     compile "com.fasterxml.jackson.dataformat:jackson-dataformat-csv:${jacksonVersion}"
     runtime('org.springframework.boot:spring-boot-devtools')
     optional "org.springframework.boot:spring-boot-configuration-processor" //requires 'propdeps 'plugin
-    compile "com.graphql-java:graphql-spring-boot-starter:${graphqlSpringBootStarterVersion}"
+    compile "com.graphql-java-kickstart:graphql-spring-boot-starter:${graphqlSpringBootStarterVersion}"
     // to embed GraphiQL tool
-    compile "com.graphql-java:graphiql-spring-boot-starter:${graphqlSpringBootStarterVersion}"
-    compile "com.graphql-java:graphql-java-tools:4.3.0"
+    compile "com.graphql-java-kickstart:graphiql-spring-boot-starter:${graphqlSpringBootStarterVersion}"
+    compile "com.graphql-java-kickstart:graphql-java-tools:5.7.1"
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile('org.springframework.security:spring-security-test')
 }
