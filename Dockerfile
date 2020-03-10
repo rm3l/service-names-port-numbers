@@ -42,6 +42,7 @@ EXPOSE 8080
 EXPOSE 8081
 RUN apt-get update && apt-get install --yes --force-yes \
 	curl \
+	netbase \
 	&& rm -rf /var/lib/apt/lists/*
 HEALTHCHECK --interval=5m --timeout=3s \
   CMD curl -f http://localhost:8081/management/health || exit 1
