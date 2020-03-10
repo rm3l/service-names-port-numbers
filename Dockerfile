@@ -21,9 +21,8 @@
 #SOFTWARE.
 
 FROM adoptopenjdk:13-jdk-openj9 AS BUILD_IMAGE
-MAINTAINER Armel Soro <armel@rm3l.org>
+LABEL maintainer="Armel Soro <armel@rm3l.org>"
 ARG GRADLE_OPTS="-Dorg.gradle.daemon=false"
-#ARG GRADLE_OPTS="$GRADLE_OPTS -Dkotlin.incremental=false -Dkotlin.compiler.execution.strategy=in-process"
 USER root
 ENV APP_HOME=/code/service-names-port-numbers/
 RUN mkdir -p $APP_HOME
@@ -33,7 +32,7 @@ RUN chmod 755 ./gradlew
 RUN ./gradlew build --stacktrace
 
 FROM adoptopenjdk:13-jdk-openj9
-MAINTAINER Armel Soro <armel@rm3l.org>
+LABEL maintainer="Armel Soro <armel@rm3l.org>"
 ENV JAVA_OPTS=""
 WORKDIR /root/
 COPY --from=BUILD_IMAGE \
