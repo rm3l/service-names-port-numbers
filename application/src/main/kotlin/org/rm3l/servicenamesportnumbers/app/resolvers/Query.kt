@@ -25,7 +25,7 @@ SOFTWARE.
 
 package org.rm3l.servicenamesportnumbers.app.resolvers
 
-import com.coxautodev.graphql.tools.GraphQLQueryResolver
+import graphql.kickstart.tools.GraphQLQueryResolver
 import org.rm3l.servicenamesportnumbers.ServiceNamesPortNumbersClient
 import org.rm3l.servicenamesportnumbers.domain.Protocol
 import org.rm3l.servicenamesportnumbers.domain.Record

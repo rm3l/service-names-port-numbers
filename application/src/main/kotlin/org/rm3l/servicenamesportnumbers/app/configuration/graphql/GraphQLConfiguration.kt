@@ -23,7 +23,7 @@ SOFTWARE.
  */
 package org.rm3l.servicenamesportnumbers.app.configuration.graphql
 
-import com.coxautodev.graphql.tools.SchemaParser
+import graphql.kickstart.tools.SchemaParser
 import graphql.schema.GraphQLSchema
 import org.rm3l.servicenamesportnumbers.ServiceNamesPortNumbersClient
 import org.rm3l.servicenamesportnumbers.app.resolvers.Query
