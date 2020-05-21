@@ -7,7 +7,7 @@
 
 [![Heroku](https://img.shields.io/badge/heroku-deployed%20on%20free%20dyno-blue.svg)](https://service-names-port-numbers.herokuapp.com/graphiql)
 
-[![Docker Automated build](https://img.shields.io/docker/automated/rm3l/service-names-port-numbers.svg)](https://hub.docker.com/r/rm3l/service-names-port-numbers) 
+<!-- [![Docker Automated build](https://img.shields.io/docker/automated/rm3l/service-names-port-numbers.svg)](https://hub.docker.com/r/rm3l/service-names-port-numbers)  -->
 [![Docker Build Status](https://img.shields.io/docker/build/rm3l/service-names-port-numbers.svg)](https://hub.docker.com/r/rm3l/service-names-port-numbers) 
 [![Docker Stars](https://img.shields.io/docker/stars/rm3l/service-names-port-numbers.svg)](https://hub.docker.com/r/rm3l/service-names-port-numbers) 
 [![Docker Pulls](https://img.shields.io/docker/pulls/rm3l/service-names-port-numbers.svg)](https://hub.docker.com/r/rm3l/service-names-port-numbers)
