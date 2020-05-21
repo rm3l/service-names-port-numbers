@@ -37,7 +37,7 @@ version = '0.5.0'
 dependencies {
     compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
     compile("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
-    compile 'com.github.ben-manes.caffeine:caffeine:2.6.0'
+    compile 'com.github.ben-manes.caffeine:caffeine:2.8.3'
     testCompile 'junit:junit:4.13'
 }
 
