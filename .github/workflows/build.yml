@@ -60,4 +60,4 @@ jobs:
       - name: Gradle Jib
         env:
           DOCKER_BUILDKIT: 1
-        run: ./gradlew jib -Djib.to.image=docker.io/org.rm3l/service-names-port-numbers:latest -Djib.to.auth.username="${{ secrets.DOCKER_HUB_USERNAME }}" -Djib.to.auth.password="${{ secrets.DOCKER_HUB_PASSWORD }}"
+        run: ./gradlew jib -Djib.to.image=registry.hub.docker.com/rm3l/service-names-port-numbers:latest -Djib.to.auth.username="${{ secrets.DOCKER_HUB_USERNAME }}" -Djib.to.auth.password="${{ secrets.DOCKER_HUB_PASSWORD }}"
