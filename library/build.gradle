@@ -32,7 +32,7 @@ apply plugin: 'org.jetbrains.dokka'
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'maven'
 
-version = '0.6.2'
+version = '0.7.0'
 
 dependencies {
     compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
@@ -93,10 +93,10 @@ bintray {
 
         //noinspection GroovyAssignabilityCheck
         version {
-            name = '0.6.2'
+            name = '0.7.0'
             desc = 'Service Names and Port Numbers Lookup library'
             released = new Date()
-            vcsTag = '0.6.2'
+            vcsTag = '0.7.0'
         }
 
         publicDownloadNumbers = true
