@@ -23,6 +23,7 @@ buildscript {
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         classpath 'io.spring.gradle:propdeps-plugin:0.0.10.RELEASE'
+        classpath "com.google.cloud.tools:jib-gradle-plugin:2.2.0"
     }
 }
 
@@ -34,6 +35,7 @@ apply plugin: 'kotlin-spring'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+apply plugin: "com.google.cloud.tools.jib"
 
 version = '0.5.0'
 
@@ -66,3 +68,22 @@ compileJava.dependsOn(processResources)
 
 task stage(dependsOn: ['build', 'clean'])
 build.mustRunAfter clean
+
+jib {
+    to {
+        image = "${project.group}/${project.parent.name}"
+//        auth {
+//            username = 'oauth2accesstoken'
+//            password = 'gcloud auth print-access-token'.execute().text.trim()
+//        }
+        tags = [ project.version ]
+    }
+    container {
+        labels = [
+            "maintainer": "Armel Soro <armel@rm3l.org>"
+        ]
+        jvmFlags = ['-Djava.security.egd=file:/dev/./urandom']
+        ports = ['8080', '8081']
+        format = 'OCI'
+    }
+}

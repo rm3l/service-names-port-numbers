@@ -3,7 +3,7 @@
 [![Bintray](https://img.shields.io/bintray/v/rm3l/maven/org.rm3l:service-names-port-numbers.svg)](https://bintray.com/rm3l/maven/org.rm3l%3Aservice-names-port-numbers) 
 [![License](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/rm3l/service-names-port-numbers/blob/master/LICENSE) 
 
-[![Build Workflow](https://github.com/rm3l/service-names-port-numbers/workflows/Gradle%20Build/badge.svg)](https://github.com/rm3l/service-names-port-numbers/actions?query=workflow%3A%22Gradle+Build%22)
+[![Build Workflow](https://github.com/rm3l/service-names-port-numbers/workflows/CI/badge.svg)](https://github.com/rm3l/service-names-port-numbers/actions?query=workflow%3A%22CI%22)
 
 [![Heroku](https://img.shields.io/badge/heroku-deployed%20on%20free%20dyno-blue.svg)](https://service-names-port-numbers.herokuapp.com/graphiql)
 
