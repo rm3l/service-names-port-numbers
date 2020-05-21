@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT -Dmanagement.port=$PORT -Dmanagement.security.enabled=true $JAVA_OPTS -jar application/build/libs/service-names-port-numbers-app-0.6.0.jar
+web: java -Dserver.port=$PORT -Dmanagement.port=$PORT -Dmanagement.security.enabled=true $JAVA_OPTS -jar application/build/libs/service-names-port-numbers-app-0.6.1.jar
