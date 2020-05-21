@@ -84,3 +84,38 @@ jobs:
       - name: Push latest Docker image
         if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/')
         run: ./gradlew jib -Djib.to.image="registry.hub.docker.com/rm3l/service-names-port-numbers:latest" -Djib.to.auth.username="${{ secrets.DOCKER_HUB_USERNAME }}" -Djib.to.auth.password="${{ secrets.DOCKER_HUB_PASSWORD }}"
+
+  publishLibrary:
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+    needs: build
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - uses: actions/checkout@v2
+
+      - name: Set up JDK 14
+        uses: actions/setup-java@v1
+        with:
+          java-version: 14
+
+      - uses: actions/cache@master
+      #Using master because of the multi-paths feature (reportedly only available on master at the moment)
+      with:
+        path: |
+          ~/.gradle/wrapper
+          ~/.gradle/caches
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Publish Bintray version
+        run: |
+          mkdir -p ~/.droid
+          echo "user=${{ secrets.BINTRAY_USERNAME }}" > ~/.droid/service-names-port-numbers.bintray.properties
+          echo "key=${{ secrets.BINTRAY_PUBLISH_KEY }}" >> ~/.droid/service-names-port-numbers.bintray.properties
+          ./gradlew javadoc bintrayUpload

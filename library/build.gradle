@@ -71,7 +71,7 @@ artifacts {
 bintray {
 
     //Attempt to read keystore.properties file, if any first
-    final propsFile = new File(homePath.toString() + "/.droid/", "maoni.bintray.properties")
+    final propsFile = new File(homePath.toString() + "/.droid/", "service-names-port-numbers.bintray.properties")
 
     if (propsFile.exists()) {
         printf("[Bintray] Using properties file located at " + propsFile.absolutePath)
