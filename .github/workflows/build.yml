@@ -77,5 +77,5 @@ jobs:
         id: refvar
         run: echo "::set-output name=gitRefName::${GITHUB_REF#refs/*/}"
 
-      - name: Gradle Jib (master)
+      - name: Run Gradle Jib task
         run: ./gradlew jib -Djib.to.image="registry.hub.docker.com/rm3l/service-names-port-numbers:${{ steps.refvar.outputs.gitRefName }}" -Djib.to.auth.username="${{ secrets.DOCKER_HUB_USERNAME }}" -Djib.to.auth.password="${{ secrets.DOCKER_HUB_PASSWORD }}"
