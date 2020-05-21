@@ -49,6 +49,8 @@ jobs:
         #Using master because of the multi-paths feature (reportedly only available on master at the moment)
         with:
           path: |
+            ~/.gradle/wrapper
+            ~/.gradle/caches
             application/build/jib-cache
           key: ${{ runner.os }}-jib-${{ hashFiles('**/*.gradle*') }}
           restore-keys: |
