@@ -72,7 +72,7 @@ build.mustRunAfter clean
 jib {
     to {
         image = "${project.group}/${project.parent.name}"
-        tags = [ project.version ]
+//        tags = [ project.version ]
     }
     container {
         labels = [
