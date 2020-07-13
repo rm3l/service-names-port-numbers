@@ -23,7 +23,7 @@ final homePath = System.properties['user.home']
 
 buildscript {
     dependencies {
-        classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.10.1"
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.11.0-dev-59"
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
     }
 }
