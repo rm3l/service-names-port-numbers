@@ -56,10 +56,11 @@ task generateJavadocsJar(type: Jar) {
     classifier 'javadoc'
 }
 
-task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaTask) {
-    outputFormat = 'javadoc'
-    outputDirectory = "$buildDir/javadoc"
-}
+//task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaTask) {
+//dokkaJavadoc {
+//    outputFormat = 'javadoc'
+//    outputDirectory = "$buildDir/javadoc"
+//}
 
 generateJavadocsJar.dependsOn generateJavadocs
 
@@ -110,10 +111,10 @@ bintray {
     configurations = ['archives']
 }
 
-dokka {
-    outputFormat = 'html'
-    outputDirectory = "$buildDir/javadoc"
-}
+//dokka {
+//    outputFormat = 'html'
+//    outputDirectory = "$buildDir/javadoc"
+//}
 
 task stage(dependsOn: ['build', 'clean'])
 build.mustRunAfter clean
