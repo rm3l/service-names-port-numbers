@@ -25,6 +25,7 @@ package org.rm3l.servicenamesportnumbers.app.configuration.graphql
 
 import graphql.kickstart.tools.SchemaParser
 import graphql.schema.GraphQLSchema
+import graphql.Scalars
 import org.rm3l.servicenamesportnumbers.ServiceNamesPortNumbersClient
 import org.rm3l.servicenamesportnumbers.app.resolvers.Query
 import org.springframework.context.annotation.Bean
@@ -43,6 +44,7 @@ class GraphQLConfiguration(val registryClient: ServiceNamesPortNumbersClient) {
                 .toList()
         return SchemaParser.newParser()
                 .files(*allSchemas.toTypedArray())
+		.scalars(Scalars.GraphQLLong)
                 .resolvers(Query(registryClient))
                 .build()
                 .makeExecutableSchema()
