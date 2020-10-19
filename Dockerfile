@@ -20,7 +20,7 @@
 #OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #SOFTWARE.
 
-FROM adoptopenjdk:14-jdk-openj9 AS BUILD_IMAGE
+FROM adoptopenjdk:15-jdk-openj9 AS BUILD_IMAGE
 LABEL maintainer="Armel Soro <armel@rm3l.org>"
 ARG GRADLE_OPTS="-Dorg.gradle.daemon=false"
 USER root
@@ -31,7 +31,7 @@ COPY . .
 RUN chmod 755 ./gradlew
 RUN ./gradlew build --stacktrace
 
-FROM adoptopenjdk:14-jdk-openj9
+FROM adoptopenjdk:15-jdk-openj9
 LABEL maintainer="Armel Soro <armel@rm3l.org>"
 ENV JAVA_OPTS=""
 WORKDIR /root/
