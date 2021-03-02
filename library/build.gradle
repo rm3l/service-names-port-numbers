@@ -33,7 +33,7 @@ apply plugin: 'maven'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
-version = '0.8.0'
+version = '0.8.1'
 
 dependencies {
     compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
@@ -84,24 +84,6 @@ artifacts {
     archives generateSourcesJar
 }
 
-File secretPropsFile = project.rootProject.file('local.properties')
-if (secretPropsFile.exists()) {
-    Properties p = new Properties()
-    new FileInputStream(secretPropsFile).withCloseable { is ->
-        p.load(is)
-    }
-    p.each { name, value ->
-        ext[name] = value
-    }
-} else {
-    ext["signing.keyId"] = System.getenv('SIGNING_KEY_ID')
-    ext["signing.password"] = System.getenv('SIGNING_PASSWORD')
-    ext["signing.secretKeyRingFile"] = System.getenv('SIGNING_SECRET_KEY_RING_FILE')
-    ext["ossrhUsername"] = System.getenv('OSSRH_USERNAME')
-    ext["ossrhPassword"] = System.getenv('OSSRH_PASSWORD')
-    ext["sonatypeStagingProfileId"] = System.getenv('SONATYPE_STAGING_PROFILE_ID')
-}
-
 publishing {
     publications {
         release(MavenPublication) {
@@ -109,7 +91,7 @@ publishing {
             // we'll set up later
             groupId 'org.rm3l'
             artifactId 'service-names-port-numbers-library'
-            version '0.8.0'
+            version '0.8.1'
 
             // Two artifacts, the `aar` (or `jar`) and the sources
             if (project.plugins.findPlugin("com.android.library")) {
