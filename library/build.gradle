@@ -24,15 +24,16 @@ final homePath = System.properties['user.home']
 buildscript {
     dependencies {
         classpath "org.jetbrains.dokka:dokka-gradle-plugin:1.4.20-dev-65"
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
     }
 }
 
 apply plugin: 'org.jetbrains.dokka'
-apply plugin: 'com.jfrog.bintray'
 apply plugin: 'maven'
+//cf. https://getstream.io/blog/publishing-libraries-to-mavencentral-2021/
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
 
-version = '0.8.0'
+version = '0.8.1'
 
 dependencies {
     compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
@@ -64,51 +65,100 @@ task generateJavadocsJar(type: Jar) {
 
 generateJavadocsJar.dependsOn generateJavadocs
 
+// task androidSourcesJar(type: Jar) {
+//     archiveClassifier.set('sources')
+//     if (project.plugins.findPlugin("com.android.library")) {
+//         // For Android libraries
+//         from android.sourceSets.main.java.srcDirs
+//         from android.sourceSets.main.kotlin.srcDirs
+//     } else {
+//         // For pure Kotlin libraries, in case you have them
+//         from sourceSets.main.java.srcDirs
+//         from sourceSets.main.kotlin.srcDirs
+//     }
+// }
+
 artifacts {
+    // archives androidSourcesJar
     archives generateJavadocsJar
     archives generateSourcesJar
 }
 
-bintray {
+publishing {
+    publications {
+        release(MavenPublication) {
+            // The coordinates of the library, being set from variables that
+            // we'll set up later
+            groupId 'org.rm3l'
+            artifactId 'service-names-port-numbers-library'
+            version '0.8.1'
 
-    //Attempt to read keystore.properties file, if any first
-    final propsFile = new File(homePath.toString() + "/.droid/", "service-names-port-numbers.bintray.properties")
+            // Two artifacts, the `aar` (or `jar`) and the sources
+            if (project.plugins.findPlugin("com.android.library")) {
+                artifact("$buildDir/outputs/aar/${project.getName()}-release.aar")
+            } else {
+                artifact("$buildDir/libs/${project.getName()}-${version}.jar")
+            }
+            artifact generateSourcesJar
+            artifact generateJavadocsJar
 
-    if (propsFile.exists()) {
-        printf("[Bintray] Using properties file located at " + propsFile.absolutePath)
-        final props = new Properties()
-        props.load(new FileInputStream(propsFile))
-        user = props['user']
-        key = props['key']
-    } else {
-        user = ""
-        key = ""
-    }
+            // Mostly self-explanatory metadata
+            pom {
+                name = 'service-names-port-numbers-library'
+                description = 'Library and Microservice (GraphQL API) against the IANA Service Names And Port Numbers Registry'
+                url = 'https://github.com/rm3l/service-names-port-numbers'
+                licenses {
+                    license {
+                        name = 'MIT License'
+                        url = 'https://github.com/rm3l/service-names-port-numbers/blob/master/LICENSE'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'rm3l'
+                        name = 'Armel Soro'
+                        email = 'armel@rm3l.org'
+                    }
+                    // Add all other devs here...
+                }
+                // Version control info - if you're using GitHub, follow the format as seen here
+                scm {
+                    connection = 'scm:git@github.com:rm3l/service-names-port-numbers.git'
+                    developerConnection = 'scm:git:ssh://github.com/rm3l/service-names-port-numbers.git'
+                    url = 'https://github.com/rm3l/service-names-port-numbers/tree/main'
+                }
+                // A slightly hacky fix so that your POM will include any transitive dependencies
+                // that your library builds upon
+                withXml {
+                    def dependenciesNode = asNode().appendNode('dependencies')
 
-    publish = true //If version should be auto published after an upload
-
-    pkg {
-        repo = 'maven'
-        name = 'org.rm3l:service-names-port-numbers'
-        labels = ['iana', 'lookup', 'services', 'ports']
-
-        //noinspection GroovyAssignabilityCheck
-        version {
-            name = '0.8.0'
-            desc = 'Service Names and Port Numbers Lookup library'
-            released = new Date()
-            vcsTag = '0.8.0'
+                    project.configurations.implementation.allDependencies.each {
+                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                        dependencyNode.appendNode('groupId', it.group)
+                        dependencyNode.appendNode('artifactId', it.name)
+                        dependencyNode.appendNode('version', it.version)
+                    }
+                }
+            }
         }
-
-        publicDownloadNumbers = true
-
-        licenses = ['MIT']
-        vcsUrl = 'https://github.com/rm3l/service-names-port-numbers.git'
-        websiteUrl = 'https://github.com/rm3l/service-names-port-numbers'
-        issueTrackerUrl = 'https://github.com/rm3l/service-names-port-numbers/issues'
-
     }
-    configurations = ['archives']
+    // The repository to publish to, Sonatype/MavenCentral
+    repositories {
+        maven {
+            // This is an arbitrary name, you may also use "mavencentral" or
+            // any other name that's descriptive for you
+            name = "sonatype"
+            url = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+            credentials {
+                username ossrhUsername
+                password ossrhPassword
+            }
+        }
+    }
+}
+
+signing {
+    sign publishing.publications
 }
 
 //dokka {

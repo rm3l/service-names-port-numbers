@@ -27,13 +27,22 @@ buildscript {
         graphqlSpringBootStarterVersion = '11.0.0'
     }
     repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
         jcenter()
     }
     dependencies {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
         classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
+        classpath "io.github.gradle-nexus:publish-plugin:1.0.0"
     }
 }
+
+apply plugin: "io.github.gradle-nexus.publish-plugin"
+
+group = "org.rm3l"
+version = "0.8.1"
 
 allprojects {
     buildscript {
@@ -66,4 +75,34 @@ subprojects {
         jcenter()
     }
 
+}
+
+File secretPropsFile = project.rootProject.file('local.properties')
+if (secretPropsFile.exists()) {
+    Properties p = new Properties()
+    new FileInputStream(secretPropsFile).withCloseable { is ->
+        p.load(is)
+    }
+    p.each { name, value ->
+        ext[name] = value
+    }
+} else {
+    ext["signing.keyId"] = System.getenv('SIGNING_KEY_ID')
+    ext["signing.password"] = System.getenv('SIGNING_PASSWORD')
+    ext["signing.secretKeyRingFile"] = System.getenv('SIGNING_SECRET_KEY_RING_FILE')
+    ext["ossrhUsername"] = System.getenv('OSSRH_USERNAME')
+    ext["ossrhPassword"] = System.getenv('OSSRH_PASSWORD')
+    ext["sonatypeStagingProfileId"] = System.getenv('SONATYPE_STAGING_PROFILE_ID')
+}
+
+
+nexusPublishing {
+    // packageGroup = "org.rm3l"  //defaults to 'project.group'
+    repositories {
+        sonatype { 
+            stagingProfileId = sonatypeStagingProfileId
+            username = ossrhUsername
+            password = ossrhPassword
+        }
+    }
 }
