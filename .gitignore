@@ -23,6 +23,8 @@
 /build/
 !gradle/wrapper/gradle-wrapper.jar
 
+local.properties
+
 ### STS ###
 .apt_generated
 .classpath
@@ -45,3 +47,6 @@ dist/
 nbdist/
 .nb-gradle/
 out/
+
+application/bin/
+library/bin/
