@@ -55,8 +55,11 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
-    - name: Build with Gradle
+    - name: Build
       run: ./gradlew build --stacktrace
+
+    - name: Javadoc
+      run: ./gradlew javadoc --stacktrace
 
   docker:
     if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/'))
@@ -117,6 +120,15 @@ jobs:
         with:
           java-version: 15
 
+      # Base64 decodes and pipes the GPG key content into the secret file
+      - name: Prepare environment
+        env:
+          GPG_KEY_CONTENTS: ${{ secrets.GPG_KEY_CONTENTS }}
+          SIGNING_SECRET_KEY_RING_FILE: ${{ secrets.SIGNING_SECRET_KEY_RING_FILE }}
+        run: |
+          git fetch --unshallow
+          sudo bash -c "echo '$GPG_KEY_CONTENTS' | base64 -d > '$SIGNING_SECRET_KEY_RING_FILE'"
+
       - uses: actions/cache@master
         #Using master because of the multi-paths feature (reportedly only available on master at the moment)
         with:
@@ -130,9 +142,17 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Publish Bintray version
-        run: |
-          mkdir -p ~/.droid
-          echo "user=${{ secrets.BINTRAY_USERNAME }}" > ~/.droid/service-names-port-numbers.bintray.properties
-          echo "key=${{ secrets.BINTRAY_PUBLISH_KEY }}" >> ~/.droid/service-names-port-numbers.bintray.properties
-          ./gradlew javadoc bintrayUpload
+      # Generates other artifacts (javadocJar is optional)
+      - name: Build other artifacts
+        run: ./gradlew javadoc
+
+      # Runs upload, and then closes & releases the repository
+      - name: Publish to MavenCentral
+        run: ./gradlew publishToSonatype --max-workers 1 closeAndReleaseStagingRepository
+        env:
+          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+          SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
+          SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
+          SIGNING_SECRET_KEY_RING_FILE: ${{ secrets.SIGNING_SECRET_KEY_RING_FILE }}
+          SONATYPE_STAGING_PROFILE_ID: ${{ secrets.SONATYPE_STAGING_PROFILE_ID }}
