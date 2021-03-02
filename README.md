@@ -1,6 +1,6 @@
 # Service Names And Port Numbers Lookup
 
-[![Bintray](https://img.shields.io/bintray/v/rm3l/maven/org.rm3l:service-names-port-numbers.svg)](https://bintray.com/rm3l/maven/org.rm3l%3Aservice-names-port-numbers) 
+[![Maven Central](https://img.shields.io/maven-central/v/org.rm3l/service-names-port-numbers-library)](https://search.maven.org/artifact/org.rm3l/service-names-port-numbers-library)
 [![License](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/rm3l/service-names-port-numbers/blob/master/LICENSE) 
 
 [![Build Workflow](https://github.com/rm3l/service-names-port-numbers/workflows/CI/badge.svg)](https://github.com/rm3l/service-names-port-numbers/actions?query=workflow%3A%22CI%22)
