@@ -68,7 +68,7 @@ Also, this runs on a free dyno, and as such it may go to sleep ater 30 minutes o
 
 ### Using the library
 
-The library is published on Bintray JCenter. So importing it should be straightforward.
+The library is published on [Maven Central](https://search.maven.org/artifact/org.rm3l/service-names-port-numbers-library). So importing it should be straightforward.
 
 #### Adding the dependency
 
@@ -85,7 +85,7 @@ The library is published on Bintray JCenter. So importing it should be straightf
 ##### Gradle
 
 ```groovy
-compile 'org.rm3l:service-names-port-numbers-library:0.8.1'
+implementation 'org.rm3l:service-names-port-numbers-library:0.8.1'
 ```
 
 #### Usage

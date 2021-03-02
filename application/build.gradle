@@ -41,7 +41,6 @@ version = '0.8.1'
 
 repositories {
     mavenCentral()
-    jcenter() //Needed for khttp, but may be dropped once we have this included transitively from the 'library' project
 }
 
 dependencies {
