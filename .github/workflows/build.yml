@@ -42,13 +42,12 @@ jobs:
       with:
         java-version: 15
 
-    - uses: actions/cache@master
-      #Using master because of the multi-paths feature (reportedly only available on master at the moment)
+    - uses: actions/cache@v2
       with:
         path: |
           ~/.gradle/wrapper
           ~/.gradle/caches
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
         restore-keys: |
           ${{ runner.os }}-gradle-
 
@@ -79,14 +78,13 @@ jobs:
         with:
           java-version: 15
 
-      - uses: actions/cache@master
-        #Using master because of the multi-paths feature (reportedly only available on master at the moment)
+      - uses: actions/cache@v2
         with:
           path: |
             ~/.gradle/wrapper
             ~/.gradle/caches
             application/build/jib-cache
-          key: ${{ runner.os }}-jib-${{ hashFiles('**/*.gradle*') }}
+          key: ${{ runner.os }}-jib-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
 
@@ -129,13 +127,12 @@ jobs:
           git fetch --unshallow
           sudo bash -c "echo '$GPG_KEY_CONTENTS' | base64 -d > '$SIGNING_SECRET_KEY_RING_FILE'"
 
-      - uses: actions/cache@master
-        #Using master because of the multi-paths feature (reportedly only available on master at the moment)
+      - uses: actions/cache@v2
         with:
           path: |
             ~/.gradle/wrapper
             ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
 
