@@ -28,7 +28,6 @@ buildscript {
 }
 
 apply plugin: 'org.jetbrains.dokka'
-apply plugin: 'maven'
 //cf. https://getstream.io/blog/publishing-libraries-to-mavencentral-2021/
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
