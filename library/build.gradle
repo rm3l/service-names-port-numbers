@@ -32,7 +32,7 @@ apply plugin: 'org.jetbrains.dokka'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
-version = '0.9.0'
+version = '0.10.0'
 
 dependencies {
     compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
@@ -90,7 +90,7 @@ publishing {
             // we'll set up later
             groupId 'org.rm3l'
             artifactId 'service-names-port-numbers-library'
-            version '0.9.0'
+            version '0.10.0'
 
             // Two artifacts, the `aar` (or `jar`) and the sources
             if (project.plugins.findPlugin("com.android.library")) {
