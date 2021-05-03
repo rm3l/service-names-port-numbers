@@ -52,7 +52,7 @@ dependencies {
     compile "com.graphql-java-kickstart:graphql-spring-boot-starter:${graphqlSpringBootStarterVersion}"
     // to embed GraphiQL tool
     compile "com.graphql-java-kickstart:graphiql-spring-boot-starter:${graphqlSpringBootStarterVersion}"
-    compile "com.graphql-java-kickstart:graphql-java-tools:11.0.0"
+    compile "com.graphql-java-kickstart:graphql-java-tools:11.0.1"
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile('org.springframework.security:spring-security-test')
 }
