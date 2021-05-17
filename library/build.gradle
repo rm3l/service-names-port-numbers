@@ -35,10 +35,10 @@ apply plugin: 'signing'
 version = '0.10.0'
 
 dependencies {
-    compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
-    compile("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
-    compile 'com.github.ben-manes.caffeine:caffeine:3.0.2'
-    testCompile 'junit:junit:4.13.2'
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
+    implementation 'com.github.ben-manes.caffeine:caffeine:3.0.2'
+    testImplementation 'junit:junit:4.13.2'
 }
 
 compileJava.dependsOn(processResources)

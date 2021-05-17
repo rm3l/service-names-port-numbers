@@ -39,22 +39,22 @@ repositories {
 }
 
 dependencies {
-    compile project(':service-names-port-numbers-library')
-    compile('org.springframework.boot:spring-boot-starter-web')
-    compile('org.springframework.boot:spring-boot-starter-actuator')
-    compile('org.springframework.boot:spring-boot-starter-cache')
-    compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    compile("org.jetbrains.kotlin:kotlin-reflect")
-    compile 'com.github.ben-manes.caffeine:caffeine:3.0.2'
-    compile "com.fasterxml.jackson.module:jackson-module-kotlin:${jacksonVersion}"
-    compile "com.fasterxml.jackson.dataformat:jackson-dataformat-csv:${jacksonVersion}"
-    runtime('org.springframework.boot:spring-boot-devtools')
-    compile "com.graphql-java-kickstart:graphql-spring-boot-starter:${graphqlSpringBootStarterVersion}"
+    implementation project(':service-names-port-numbers-library')
+    implementation('org.springframework.boot:spring-boot-starter-web')
+    implementation('org.springframework.boot:spring-boot-starter-actuator')
+    implementation('org.springframework.boot:spring-boot-starter-cache')
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation 'com.github.ben-manes.caffeine:caffeine:3.0.2'
+    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:${jacksonVersion}"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-csv:${jacksonVersion}"
+    runtimeOnly('org.springframework.boot:spring-boot-devtools')
+    implementation "com.graphql-java-kickstart:graphql-spring-boot-starter:${graphqlSpringBootStarterVersion}"
     // to embed GraphiQL tool
-    compile "com.graphql-java-kickstart:graphiql-spring-boot-starter:${graphqlSpringBootStarterVersion}"
-    compile "com.graphql-java-kickstart:graphql-java-tools:11.0.1"
-    testCompile('org.springframework.boot:spring-boot-starter-test')
-    testCompile('org.springframework.security:spring-security-test')
+    implementation "com.graphql-java-kickstart:graphiql-spring-boot-starter:${graphqlSpringBootStarterVersion}"
+    implementation "com.graphql-java-kickstart:graphql-java-tools:11.0.1"
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
+    testImplementation('org.springframework.security:spring-security-test')
 }
 
 compileJava.dependsOn(processResources)
