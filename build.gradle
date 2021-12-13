@@ -35,13 +35,51 @@ buildscript {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
         classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
         classpath "io.github.gradle-nexus:publish-plugin:1.1.0"
+        classpath "pl.allegro.tech.build:axion-release-plugin:1.13.6"
     }
 }
 
 apply plugin: "io.github.gradle-nexus.publish-plugin"
+apply plugin: "pl.allegro.tech.build.axion-release"
+
+scmVersion {
+    localOnly = true
+    tag {
+        prefix = ''
+    }
+    snapshotCreator { version, position -> '' }
+    hooks {
+        pre 'fileUpdate', [
+                files: [
+                        'README.md',
+                        'Dockerfile',
+                        'Procfile'
+                ],
+                pattern: {v,p -> /service-names-port-numbers-app-$v/},
+                replacement: {v, p -> "service-names-port-numbers-app-$v"}]
+        pre 'fileUpdate', [
+                files: [
+                        'README.md'
+                ],
+                pattern: {v,p -> /<version>$v/},
+                replacement: {v, p -> "<version>$v"}]
+        pre 'fileUpdate', [
+                files: [
+                        'README.md'
+                ],
+                pattern: {v,p -> /service-names-port-numbers-library\:$v/},
+                replacement: {v, p -> "service-names-port-numbers-library:$v"}]
+        pre 'fileUpdate', [
+                files: [
+                        'library/build.gradle'
+                ],
+                pattern: {v,p -> /version '$v'/},
+                replacement: {v, p -> "version '$v'"}]
+        pre 'commit'
+    }
+}
 
 group = "org.rm3l"
-version = "0.11.0"
 
 allprojects {
     buildscript {
@@ -53,12 +91,14 @@ allprojects {
             maven { url 'https://repo.spring.io/plugins-release' }
         }
     }
+    project.version = scmVersion.version
 }
 
 subprojects {
     apply plugin: 'kotlin'
 
     group = 'org.rm3l'
+    version = rootProject.scmVersion.version
 
     sourceCompatibility = 11
     targetCompatibility = 11
