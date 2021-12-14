@@ -212,9 +212,18 @@ class ServiceNamesPortNumbersClient private constructor(
         /**
          * Entry point for constructing a new instance of the [ServiceNamesPortNumbersClient].
          * Contains by default the IANA XML Database, but you are free to add other parsers as needed.
+         *
+         * @param withIANADatabase whether to automatically pull data from the public IANA database
          */
         @JvmStatic
-        fun builder() = Builder().withIANADatabase()
+        fun builder(withIANADatabase: Boolean = true): Builder {
+          val builder = Builder()
+          return if (withIANADatabase) {
+            builder.withIANADatabase()
+          } else {
+            builder
+          }
+        }
     }
 
     /**

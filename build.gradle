@@ -113,6 +113,15 @@ subprojects {
         mavenCentral()
     }
 
+    test {
+        useJUnitPlatform()
+    }
+
+    dependencies {
+        testImplementation(platform('org.junit:junit-bom:5.8.2'))
+        testImplementation('org.junit.jupiter:junit-jupiter')
+    }
+
 }
 
 File secretPropsFile = project.rootProject.file('local.properties')
