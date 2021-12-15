@@ -146,11 +146,7 @@ if (secretPropsFile.exists()) {
 nexusPublishing {
     // packageGroup = "org.rm3l"  //defaults to 'project.group'
     repositories {
-        sonatype {
-            //only for users registered in Sonatype after 24 Feb 2021
-            //see https://central.sonatype.org/news/20210223_new-users-on-s01/
-            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
-            snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
+        sonatype { 
             stagingProfileId = project.ext.has('sonatypeStagingProfileId') ? project.ext.sonatypeStagingProfileId : ''
             username = project.ext.has('ossrhUsername') ? project.ext.ossrhUsername : ''
             password = project.ext.has('ossrhPassword') ? project.ext.ossrhPassword : ''
