@@ -35,7 +35,7 @@ apply plugin: 'signing'
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
     implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
-    implementation 'com.github.ben-manes.caffeine:caffeine:3.0.5'
+    implementation 'com.github.ben-manes.caffeine:caffeine:3.0.6'
     testImplementation 'junit:junit:4.13.2'
 }
 
