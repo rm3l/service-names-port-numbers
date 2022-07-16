@@ -23,7 +23,7 @@ final homePath = System.properties['user.home']
 
 buildscript {
     dependencies {
-        classpath "org.jetbrains.dokka:dokka-gradle-plugin:1.7.0"
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:1.7.10"
     }
 }
 
