@@ -4,8 +4,9 @@
 [![License](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/rm3l/service-names-port-numbers/blob/master/LICENSE) 
 
 [![Build Workflow](https://github.com/rm3l/service-names-port-numbers/workflows/CI/badge.svg)](https://github.com/rm3l/service-names-port-numbers/actions?query=workflow%3A%22CI%22)
+[![Deploy Workflow](https://github.com/rm3l/service-names-port-numbers/workflows/Deploy/badge.svg)](https://github.com/rm3l/service-names-port-numbers/actions?query=workflow%3A%Deploy%22)
 
-[![Heroku](https://img.shields.io/badge/heroku-deployed%20on%20free%20dyno-blue.svg)](https://service-names-port-numbers.herokuapp.com/graphiql)
+[![Fly.io](https://img.shields.io/badge/deployed%20on%20Fly.io-blue.svg)](https://service-names-port-numbers.fly.dev/graphiql)
 
 [![Docker Stars](https://img.shields.io/docker/stars/rm3l/service-names-port-numbers.svg)](https://hub.docker.com/r/rm3l/service-names-port-numbers)
 [![Docker Pulls](https://img.shields.io/docker/pulls/rm3l/service-names-port-numbers.svg)](https://hub.docker.com/r/rm3l/service-names-port-numbers)
@@ -14,20 +15,21 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [Usage](#usage)
-  - [Live Server](#live-server)
-  - [Using the library](#using-the-library)
-    - [Adding the dependency](#adding-the-dependency)
-      - [Maven](#maven)
-      - [Gradle](#gradle)
-    - [Usage](#usage-1)
-  - [Using the server](#using-the-server)
-    - [Downloading and building](#downloading-and-building)
-    - [Querying the GraphQL API](#querying-the-graphql-api)
-    - [Docker](#docker)
-- [In use in the following apps/services](#in-use-in-the-following-appsservices)
-- [Developed by](#developed-by)
-- [License](#license)
+- [Service Names And Port Numbers Lookup](#service-names-and-port-numbers-lookup)
+  - [Usage](#usage)
+    - [Live Server](#live-server)
+    - [Using the library](#using-the-library)
+      - [Adding the dependency](#adding-the-dependency)
+        - [Maven](#maven)
+        - [Gradle](#gradle)
+      - [Usage](#usage-1)
+    - [Using the server](#using-the-server)
+      - [Downloading and building](#downloading-and-building)
+      - [Querying the GraphQL API](#querying-the-graphql-api)
+      - [Docker](#docker)
+  - [In use in the following apps/services](#in-use-in-the-following-appsservices)
+  - [Developed by](#developed-by)
+  - [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -52,14 +54,14 @@ And [GraphQL](http://graphql.org) is a data query language allowing clients to d
 and exactly the same structure of the data is returned from the server. It is a strongly typed runtime which allows 
 clients to dictate what data is needed.
 
-* Live Server on Heroku PaaS: https://service-names-port-numbers.herokuapp.com/graphiql
+* Live Server on Fly.io PaaS: https://service-names-port-numbers.fly.dev/graphiql
 * Download IANA Database: https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml
 
 ## Usage
 
 ### Live Server
 
-A live running version of the GraphQL API is available on Heroku: https://service-names-port-numbers.herokuapp.com/graphiql
+A live running version of the GraphQL API is available on Fly.io: https://service-names-port-numbers.fly.dev/graphiql
 
 Note that this API operates entirely from memory, and auto-updates itself every 12 hours.
 
