@@ -28,15 +28,17 @@ ENV APP_HOME=/code/service-names-port-numbers/
 RUN mkdir -p $APP_HOME
 WORKDIR $APP_HOME
 COPY . .
-RUN chmod 755 ./gradlew
-RUN ./gradlew build --stacktrace
+RUN chmod 755 ./gradlew \
+  && ./gradlew :service-names-port-numbers-app:build --info
 
 FROM adoptopenjdk:16-jdk-openj9
 LABEL maintainer="Armel Soro <armel@rm3l.org>"
 ENV JAVA_OPTS=""
 WORKDIR /root/
+# Version in this Dockerfile should always be 0.1.0, because the .git folder is purposely not in the Docker build context.
+# Therefore, the axion-release plugin is not able to determine the version based on the latest Git tag.
 COPY --from=BUILD_IMAGE \
-    /code/service-names-port-numbers/application/build/libs/service-names-port-numbers-app-0.12.2.jar \
+    /code/service-names-port-numbers/application/build/libs/service-names-port-numbers-app-0.1.0.jar \
     ./service-names-port-numbers-app.jar
 EXPOSE 8080
 EXPOSE 8081
