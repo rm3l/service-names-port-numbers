@@ -1,0 +1,73 @@
+schemaVersion: 2.2.0
+
+metadata:
+  description: Service Names and Port Numbers
+  displayName: Service Names and Port Numbers
+  language: kotlin
+  name: service-names-port-numbers
+  projectType: 'spring'
+  tags: ['gradle', 'kotlin', 'spring', 'service-names-port-numbers']
+  version: 0.1.0
+
+variables:
+  gradle_cmd: "./gradlew -g /var/lib/gradle-cache --info --no-daemon"
+
+commands:
+- exec:
+    commandLine: '{{gradle_cmd}}  :service-names-port-numbers-app:build -x test'
+    component: tools
+    group:
+      isDefault: true
+      kind: build
+    workingDir: ${PROJECT_SOURCE}
+  id: build
+- exec:
+    commandLine: '{{gradle_cmd}} :service-names-port-numbers-app:test'
+    component: tools
+    group:
+      isDefault: true
+      kind: test
+    workingDir: ${PROJECT_SOURCE}
+  id: test
+- exec:
+    commandLine: '{{gradle_cmd}} :service-names-port-numbers-app:bootRun'
+    component: tools
+    group:
+      isDefault: true
+      kind: run
+    hotReloadCapable: true
+    workingDir: ${PROJECT_SOURCE}
+  id: run
+- exec:
+    commandLine: '{{gradle_cmd}}  :service-names-port-numbers-app:bootRun --debug-jvm'
+    component: tools
+    group:
+      isDefault: true
+      kind: debug
+    hotReloadCapable: true
+    workingDir: ${PROJECT_SOURCE}
+  id: debug
+components:
+- container:
+    args: ['-f', '/dev/null']
+    command: ['tail']
+    endpoints:
+      - name: http-gradle
+        targetPort: 8080
+      - name: http-actuator
+        targetPort: 8081
+        exposure: none
+      - name: debug
+        targetPort: 5005
+        exposure: none
+    # image: registry.access.redhat.com/ubi8/openjdk-17:latest
+    image: eclipse-temurin:17-jdk
+    memoryLimit: 1024Mi
+    mountSources: true
+    volumeMounts:
+      - name: gradle-cache
+        path: /var/lib/gradle-cache
+  name: tools
+- name: gradle-cache
+  volume:
+    size: 2Gi
