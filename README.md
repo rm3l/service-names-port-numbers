@@ -65,9 +65,6 @@ A live running version of the GraphQL API is available on Fly.io: https://servic
 
 Note that this API operates entirely from memory, and auto-updates itself every 12 hours.
 
-Also, this runs on a free dyno, and as such it may go to sleep ater 30 minutes of inactivity.
-
-
 ### Using the library
 
 The library is published on [Maven Central](https://search.maven.org/artifact/org.rm3l/service-names-port-numbers-library). So importing it should be straightforward.
