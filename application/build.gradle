@@ -50,7 +50,7 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-cache')
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation 'com.github.ben-manes.caffeine:caffeine:3.1.7'
+    implementation 'com.github.ben-manes.caffeine:caffeine:3.1.8'
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin:${jacksonVersion}"
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-csv:${jacksonVersion}"
     runtimeOnly('org.springframework.boot:spring-boot-devtools')
