@@ -45,7 +45,7 @@ jobs:
         distribution: 'zulu'
         java-version: 16
 
-    - uses: actions/cache@v3
+    - uses: actions/cache@v4
       with:
         path: |
           ~/.gradle/wrapper
@@ -84,7 +84,7 @@ jobs:
           distribution: 'zulu'
           java-version: 16
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: |
             ~/.gradle/wrapper
@@ -136,7 +136,7 @@ jobs:
           git fetch --unshallow
           sudo bash -c "echo '$GPG_KEY_CONTENTS' | base64 -d > '$SIGNING_SECRET_KEY_RING_FILE'"
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: |
             ~/.gradle/wrapper
