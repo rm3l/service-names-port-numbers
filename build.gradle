@@ -35,7 +35,7 @@ buildscript {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
         classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
         classpath "io.github.gradle-nexus:publish-plugin:2.0.0"
-        classpath "pl.allegro.tech.build:axion-release-plugin:1.18.12"
+        classpath "pl.allegro.tech.build:axion-release-plugin:1.18.13"
     }
 }
 
